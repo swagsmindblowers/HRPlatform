@@ -10,7 +10,7 @@ RUN yarn production
 FROM composer:2 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
 
 # --- Stage 3: runtime image ---
 FROM php:8.4-cli
@@ -37,5 +37,4 @@ RUN composer dump-autoload --optimize --no-dev --no-interaction \
     && chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 8080
-CMD php artisan setup --force -vvv \
-    && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+CMD ["sh", "-c", "php artisan setup --force -vvv && exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
