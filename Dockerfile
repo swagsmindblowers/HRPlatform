@@ -1,22 +1,17 @@
-# --- Stage 1: build frontend assets ---
-FROM node:22 AS assets
-WORKDIR /app
-COPY package.json yarn.lock ./
-RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile
-COPY . .
-# Call mix directly instead of `yarn production` - that script's
-# `preproduction` hook runs `php artisan lang:generate`, but this stage has
-# no PHP. Lang files get generated separately in the runtime stage below,
-# where PHP is actually available.
-RUN yarn mix --production
-
-# --- Stage 2: runtime image ---
+# Single-stage build. Frontend build needs PHP (resources/js/langs.js
+# imports the generated public/js/langs/*.json files, so php artisan
+# lang:generate must run before the webpack build), and PHP needs
+# vendor/ + the full app present - so PHP, Composer, and Node all need to
+# coexist in one stage rather than being split across stages that don't
+# have what the others produced.
 FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libicu-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev \
+        nodejs npm \
     && docker-php-ext-configure gd --with-jpeg --with-freetype \
     && docker-php-ext-install -j"$(nproc)" intl pdo_mysql mbstring zip gd bcmath \
+    && npm install -g yarn \
     && apt-get purge -y --auto-remove libicu-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,15 +19,14 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Full app source, including database/seeds and database/factories that
-# composer.json's autoload.classmap needs to be present for --optimize-autoloader.
 COPY . .
-COPY --from=assets /app/public/js ./public/js
-COPY --from=assets /app/public/css ./public/css
-COPY --from=assets /app/public/mix-manifest.json ./public/mix-manifest.json
 
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader \
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile \
     && php artisan lang:generate \
+    && yarn mix --production \
+    && rm -rf node_modules \
     && chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 8080
