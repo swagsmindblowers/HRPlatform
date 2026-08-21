@@ -21,29 +21,32 @@ class ShareInertiaData
      */
     public function handle($request, $next)
     {
-        Inertia::share(array_filter([
-            'jetstream' => function () use ($request) {
-                return [
-                    'flash' => $request->session()->get('flash', []),
-                    'languages' => LocaleHelper::getLocaleList(),
-                    'enableSignups' => config('officelife.enable_signups'),
-                ];
-            },
-            'user' => function () use ($request) {
-                if (! $request->user()) {
-                    return;
-                }
+        // Shared per-key (not as a single array) so this doesn't clobber
+        // whatever HandleInertiaRequests::share() already put in the shared
+        // props store earlier in the middleware stack.
+        Inertia::share('jetstream', function () use ($request) {
+            return [
+                'flash' => $request->session()->get('flash', []),
+                'languages' => LocaleHelper::getLocaleList(),
+                'enableSignups' => config('officelife.enable_signups'),
+            ];
+        });
 
-                return [
-                    'two_factor_enabled' => ! is_null($request->user()->two_factor_secret),
-                ];
-            },
-            'errorBags' => function () use ($request) {
-                return collect(optional($request->session()->get('errors'))->getBags() ?: [])->mapWithKeys(function ($bag, $key) {
-                    return [$key => $bag->messages()];
-                })->all();
-            },
-        ]));
+        Inertia::share('user', function () use ($request) {
+            if (! $request->user()) {
+                return;
+            }
+
+            return [
+                'two_factor_enabled' => ! is_null($request->user()->two_factor_secret),
+            ];
+        });
+
+        Inertia::share('errorBags', function () use ($request) {
+            return collect(optional($request->session()->get('errors'))->getBags() ?: [])->mapWithKeys(function ($bag, $key) {
+                return [$key => $bag->messages()];
+            })->all();
+        });
 
         return $next($request);
     }
