@@ -37,6 +37,12 @@
           {{ $t('auth.confirmation_request_another_button') }}
         </loading-button>
       </form>
+
+      <p class="mt3">
+        <inertia-link href="#" class="underline-hover" @click.prevent="logout">
+          {{ $t('app.header_logout') }}
+        </inertia-link>
+      </p>
     </div>
   </authentication-card>
 </template>
@@ -67,6 +73,10 @@ export default {
   },
 
   methods: {
+    logout() {
+      this.$inertia.post(this.route('logout'));
+    },
+
     submit() {
       this.form.post(this.route('verification.send'), {
         onFinish: () => {
