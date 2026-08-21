@@ -6,13 +6,7 @@ RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile
 COPY . .
 RUN yarn production
 
-# --- Stage 2: PHP dependencies ---
-FROM composer:2 AS vendor
-WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
-
-# --- Stage 3: runtime image ---
+# --- Stage 2: runtime image ---
 FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,17 +16,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get purge -y --auto-remove libicu-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=vendor /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
+# Full app source, including database/seeds and database/factories that
+# composer.json's autoload.classmap needs to be present for --optimize-autoloader.
 COPY . .
-COPY --from=vendor /app/vendor ./vendor
 COPY --from=assets /app/public/js ./public/js
 COPY --from=assets /app/public/css ./public/css
 COPY --from=assets /app/public/mix-manifest.json ./public/mix-manifest.json
 
-RUN composer dump-autoload --optimize --no-dev --no-interaction \
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader \
     && php artisan lang:generate \
     && chown -R www-data:www-data storage bootstrap/cache
 
