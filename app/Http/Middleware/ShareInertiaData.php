@@ -21,9 +21,22 @@ class ShareInertiaData
      */
     public function handle($request, $next)
     {
-        // Shared per-key (not as a single array) so this doesn't clobber
-        // whatever HandleInertiaRequests::share() already put in the shared
-        // props store earlier in the middleware stack.
+        // HandleInertiaRequests::share() (auth/errors/flash/demo_mode/help_links)
+        // never actually reaches the response: this app's inertia-laravel
+        // version (v0.2.5) doesn't invoke a middleware's share() hook
+        // automatically, so that method is dead code. 'errors' is shared
+        // here instead, since this is the middleware whose Inertia::share()
+        // calls are demonstrably the ones that take effect - every page
+        // using the common $page.props.errors.<field> pattern for
+        // validation display (100+ templates) needs this key to exist,
+        // even as an empty array, or accessing a field on it crashes Vue's
+        // render entirely.
+        Inertia::share('errors', function () use ($request) {
+            return $request->session()->get('errors')
+                ? $request->session()->get('errors')->getBag('default')->getMessages()
+                : [];
+        });
+
         Inertia::share('jetstream', function () use ($request) {
             return [
                 'flash' => $request->session()->get('flash', []),
