@@ -4,7 +4,11 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile
 COPY . .
-RUN yarn production
+# Call mix directly instead of `yarn production` - that script's
+# `preproduction` hook runs `php artisan lang:generate`, but this stage has
+# no PHP. Lang files get generated separately in the runtime stage below,
+# where PHP is actually available.
+RUN yarn mix --production
 
 # --- Stage 2: runtime image ---
 FROM php:8.4-cli
