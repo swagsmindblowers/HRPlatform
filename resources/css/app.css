@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+/*
+ * LaunchHR design tokens.
+ * Source of truth: the brand identity pitch (runway / departure-board concept).
+ * These map to Tailwind utilities: bg-paper, text-ink, font-display, etc.
+ */
+@theme {
+  --color-paper: #f4f5f2;
+  --color-paper-raised: #ffffff;
+  --color-ink: #1d1e27;
+  --color-ink-soft: #55586a;
+  --color-steel: #8b8d97;
+  --color-steel-line: #dbdcd6;
+  --color-amber: #e8721f;
+  --color-amber-ink: #7a3a0e;
+  --color-amber-tint: #fce7d6;
+  --color-green: #2c8f63;
+  --color-green-ink: #17513a;
+  --color-green-tint: #daf0e5;
+
+  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}

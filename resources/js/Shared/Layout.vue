@@ -24,33 +24,44 @@
   align-items: center;
 }
 
-nav {
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #fff;
+.main-nav {
+  border-bottom: 1px solid var(--color-steel-line);
+  background-color: var(--color-paper-raised);
+}
 
-  a {
-    color: #4d4d4f;
+.brand-mark {
+  background-color: var(--color-amber);
+}
 
-    &:hover,
-    &:active {
-      border-bottom-width: 0;
-    }
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
 
-    &.special {
-      &:hover {
-        border-radius: 11px;
-        box-shadow: 1px 0px 1px rgba(43, 45, 80, 0.16), -1px 1px 1px rgba(43, 45, 80, 0.16), 0px 1px 4px rgba(43, 45, 80, 0.18);
-      }
-    }
+  &:hover,
+  &:active {
+    background-color: var(--color-amber-tint);
+    color: var(--color-amber-ink);
   }
 
-  &.demo-mode {
-    background-color: #fff9cb;
+  svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
   }
+}
 
-  &.beta-mode {
-    background-color: #fff9cb;
-  }
+.demo-banner {
+  border-bottom: 1px solid var(--color-steel-line);
+  background-color: var(--color-amber-tint);
+  color: var(--color-amber-ink);
 }
 
 .ball-pulse {
@@ -64,41 +75,60 @@ nav {
   <div>
     <div class="dn db-m db-l">
       <!-- DEMO MODE -->
-      <nav v-if="$page.props.demo_mode" class="bb b--white-10 tc pa3 demo-mode">
+      <nav v-if="$page.props.demo_mode" class="demo-banner text-center px-3 py-3">
         <span class="mr1">
           ⚠️
-        </span> {{ $t('app.demo_mode_desc') }} <a href="">{{ $t('app.demo_mode_read_more') }}</a>
+        </span> {{ $t('app.demo_mode_desc') }} <a href="" class="underline">{{ $t('app.demo_mode_read_more') }}</a>
       </nav>
 
-      <nav class="flex justify-between bb b--white-10">
-        <div class="flex-grow pa2 flex items-center">
-          <inertia-link href="/home" class="mr3 no-underline pa2 bb-0">
-            <img loading="lazy" src="/img/logo.png" height="30" width="30" alt="logo" />
+      <nav class="main-nav flex items-center justify-between px-3">
+        <div class="flex items-center py-2">
+          <inertia-link href="/home" class="flex items-center gap-2 mr-4 no-underline">
+            <span class="brand-mark h-6 w-6 rounded-md"></span>
+            <span class="font-display font-extrabold uppercase tracking-tight text-lg leading-none" style="color: var(--color-ink)">LaunchHR</span>
           </inertia-link>
 
           <!-- MENU -->
-          <div v-if="!noMenu">
-            <inertia-link v-if="$page.props.auth.employee.display_welcome_message" :href="'/' + $page.props.auth.company.id + '/welcome'" data-cy="header-desktop-welcome-tab" class="mr2 no-underline pa2 bb-0 special">
-              <span class="mr1">👋</span> {{ $t('app.header_welcome') }}
+          <div v-if="!noMenu" class="flex items-center gap-0.5">
+            <inertia-link v-if="$page.props.auth.employee.display_welcome_message" :href="'/' + $page.props.auth.company.id + '/welcome'" data-cy="header-desktop-welcome-tab" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><path d="M7 11V7a2 2 0 0 1 4 0v3" /><path d="M11 10.5V6a2 2 0 0 1 4 0v5" /><path d="M15 10.5V8a2 2 0 0 1 4 0v6a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-2.7L4 13a1.5 1.5 0 0 1 2.5-1.7L7 12" /></svg>
+              {{ $t('app.header_welcome') }}
             </inertia-link>
-            <inertia-link :href="'/' + $page.props.auth.company.id + '/dashboard'" class="mr2 no-underline pa2 bb-0 special">
-              <span class="mr1">🏡</span> {{ $t('app.header_home') }}
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/dashboard'" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" /></svg>
+              {{ $t('app.header_home') }}
             </inertia-link>
-            <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="mr2 no-underline pa2 bb-0 special" data-cy="header-teams-link">
-              <span class="mr1">⛺️</span> {{ $t('app.header_company') }}
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="nav-link" data-cy="header-teams-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><rect x="4" y="4" width="7" height="16" rx="1" /><rect x="13" y="9" width="7" height="11" rx="1" /><path d="M7 8h1M7 12h1M7 16h1M16 13h1M16 16h1" /></svg>
+              {{ $t('app.header_company') }}
             </inertia-link>
-            <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="mr2 no-underline pa2 bb-0 special">
-              <span class="mr1">🥇</span> {{ $t('app.header_recruiting') }}
+            <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><rect x="3" y="8" width="18" height="12" rx="1.5" /><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /></svg>
+              {{ $t('app.header_recruiting') }}
             </inertia-link>
-            <a data-cy="header-find-link" class="mr2 no-underline pa2 bb-0 special pointer" @click="showFindModal">
-              <span class="mr1">🔍</span> {{ $t('app.header_find') }}
+            <a data-cy="header-find-link" class="nav-link pointer" @click="showFindModal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.8-4.8" /></svg>
+              {{ $t('app.header_find') }}
             </a>
-            <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" data-cy="header-adminland-link" class="no-underline pa2 bb-0 special">
-              <span class="mr1">👮‍♂️</span> {{ $t('app.header_adminland') }}
+            <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" data-cy="header-adminland-link" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
+              {{ $t('app.header_adminland') }}
             </inertia-link>
           </div>
         </div>
-        <div class="pa2 flex items-center">
+        <div class="py-2 flex items-center">
           <notifications-component :notifications="notifications" />
 
           <user-menu :show-help-on-page="showHelpOnPage" />
@@ -222,12 +252,7 @@ nav {
 
     <div class="mt5 mb4 cf mw7 center tc f7">
       <ul class="list ma0">
-        <li class="di mr2">
-          <span class="mr1">🎡</span>
-          Welcome to OfficeLife beta!
-        </li>
-        <li class="di mr2"><a href="https://docs.officelife.io" class="mr2">Read our documentation</a></li>
-        <li class="di">Thanks for using our tool!</li>
+        <li class="di">Thanks for using LaunchHR!</li>
       </ul>
     </div>
   </div>
@@ -321,7 +346,7 @@ export default {
 
   methods: {
     updatePageTitle(title) {
-      document.title = title ? `${title} | OfficeLife` : 'OfficeLife';
+      document.title = title ? `${title} | LaunchHR` : 'LaunchHR';
     },
 
     showFindModal() {
