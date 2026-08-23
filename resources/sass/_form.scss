@@ -7,9 +7,9 @@ textarea {
   &:focus,
   &:active {
     background-color: #fff;
-    border-color: #346cb0;
+    border-color: var(--color-amber);
     outline: 0;
-    box-shadow: 0 0 0 1px #346cb0;
+    box-shadow: 0 0 0 1px var(--color-amber);
   }
 
   &:empty {
@@ -34,8 +34,8 @@ label {
   padding: 0.5rem;
   &:focus {
     background-color: #fff;
-    border-color: #346cb0;
+    border-color: var(--color-amber);
     outline: 0;
-    box-shadow: 0 0 0 1px #346cb0;
+    box-shadow: 0 0 0 1px var(--color-amber);
   }
 }

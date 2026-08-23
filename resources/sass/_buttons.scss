@@ -1,30 +1,36 @@
 .btn {
-  background: rgb(250, 251, 252);
-  border-radius: 6px;
-  border: 1px solid rgba(27, 31, 35, 0.15);
-  box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px 0px inset;
-  color: #727184;
+  background: var(--color-paper-raised);
+  border-radius: 9px;
+  border: 1px solid var(--color-steel-line);
+  box-shadow: 0 1px 0 rgba(29, 30, 39, 0.03);
+  color: var(--color-ink-soft);
   cursor: pointer;
   padding: 5px 16px;
   text-align: center;
+  font-weight: 600;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
 
   &:hover {
-    background-color: #f3f4f6;
-    border-color: rgba(27, 31, 35, 0.15);
-    color: #4d545f;
+    background-color: var(--color-paper);
+    border-color: var(--color-steel);
+    color: var(--color-ink);
     text-decoration: none;
-    transition-duration: 0.1s;
+  }
+
+  &:active {
+    transform: scale(0.96);
   }
 
   &.add {
-    background: #0093eb;
-    border-color: #0093eb;
-    color: #fff;
+    background: var(--color-amber);
+    border-color: var(--color-amber);
+    color: #1b1206;
 
     &:hover {
-      background-color: #1486ca;
-      border-color: #076ca9;
-      color: #fff;
+      background-color: #cf6013;
+      border-color: #cf6013;
+      color: #1b1206;
     }
   }
 
