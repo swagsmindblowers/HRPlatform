@@ -10,15 +10,15 @@ return [
     | This defines the name of the site.
     |
     */
-    'name' => 'OfficeLife',
+    'name' => 'LaunchHR',
 
     /*
     |--------------------------------------------------------------------------
     | Demo mode
     |--------------------------------------------------------------------------
     |
-    | The demo mode puts OfficeLife in a mode that is used to showcase what's
-    | OfficeLife can do to people who don't know what it can do.
+    | The demo mode puts LaunchHR in a mode that is used to showcase what's
+    | LaunchHR can do to people who don't know what it can do.
     | This mode is used on demo.officelife.io.
     |
     */
@@ -97,7 +97,7 @@ return [
     | Enable payment in the instance
     |--------------------------------------------------------------------------
     |
-    | This is used to bill the customers of the OfficeLife instance.
+    | This is used to bill the customers of the LaunchHR instance.
     | You most likely don't need to touch this variable if you self-host.
     |
     */
