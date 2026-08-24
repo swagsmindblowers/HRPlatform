@@ -48,6 +48,7 @@ class EmployeeShowViewHelper
             'twitter_handle' => $employee->twitter_handle,
             'slack_handle' => $employee->slack_handle,
             'locked' => $employee->locked,
+            'is_current_user' => $employee->id === $loggedEmployee->id,
             'holidays' => $employee->getHolidaysInformation(),
             'birthdate' => (! $employee->birthdate) ? null :
                 ($permissions['can_see_full_birthdate'] ? [

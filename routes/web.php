@@ -176,6 +176,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::resource('{employee}/employeestatuses', 'Company\\Employee\\EmployeeStatusController')->only([
                 'index', 'store', 'destroy',
             ]);
+            Route::resource('{employee}/timeoff', 'Company\\Employee\\TimeOffController')->only([
+                'store', 'destroy',
+            ]);
             Route::resource('{employee}/pronoun', 'Company\\Employee\\EmployeePronounController')->only([
                 'store', 'destroy',
             ]);

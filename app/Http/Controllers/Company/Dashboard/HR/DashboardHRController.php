@@ -43,6 +43,7 @@ class DashboardHRController extends Controller
             'employeesWithoutManagersWithPendingTimesheets' => $employeesWithoutManagersWithPendingTimesheets,
             'statisticsAboutTimesheets' => $statisticsAboutTimesheets,
             'disciplineCases' => DashboardHRViewHelper::disciplineCases($company),
+            'absences' => DashboardHRViewHelper::absences($company),
         ]);
     }
 }

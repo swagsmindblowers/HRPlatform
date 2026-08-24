@@ -92,4 +92,73 @@ class DashboardHRViewHelper
             ],
         ];
     }
+
+    /**
+     * Get absence monitoring information: who's off today, who's off in the
+     * next two weeks, and a sickness frequency table for the trailing 12
+     * months so HR can spot patterns.
+     *
+     * @param Company $company
+     * @return array
+     */
+    public static function absences(Company $company): array
+    {
+        $today = Carbon::now();
+        $in14Days = Carbon::now()->addDays(14);
+        $twelveMonthsAgo = Carbon::now()->subMonths(12);
+
+        $offToday = DB::table('employee_planned_holidays')
+            ->join('employees', 'employees.id', '=', 'employee_planned_holidays.employee_id')
+            ->where('employees.company_id', $company->id)
+            ->whereDate('employee_planned_holidays.planned_date', $today->format('Y-m-d'))
+            ->select('employees.id as employee_id', 'employees.first_name', 'employees.last_name', 'employee_planned_holidays.type', 'employee_planned_holidays.full')
+            ->get();
+
+        $upcoming = DB::table('employee_planned_holidays')
+            ->join('employees', 'employees.id', '=', 'employee_planned_holidays.employee_id')
+            ->where('employees.company_id', $company->id)
+            ->whereDate('employee_planned_holidays.planned_date', '>', $today->format('Y-m-d'))
+            ->whereDate('employee_planned_holidays.planned_date', '<=', $in14Days->format('Y-m-d'))
+            ->orderBy('employee_planned_holidays.planned_date')
+            ->select('employees.id as employee_id', 'employees.first_name', 'employees.last_name', 'employee_planned_holidays.planned_date', 'employee_planned_holidays.type', 'employee_planned_holidays.full')
+            ->get();
+
+        $sickRecords = DB::table('employee_planned_holidays')
+            ->join('employees', 'employees.id', '=', 'employee_planned_holidays.employee_id')
+            ->where('employees.company_id', $company->id)
+            ->where('employee_planned_holidays.type', 'sick')
+            ->whereDate('employee_planned_holidays.planned_date', '>=', $twelveMonthsAgo->format('Y-m-d'))
+            ->select('employees.id as employee_id', 'employees.first_name', 'employees.last_name', 'employee_planned_holidays.full')
+            ->get();
+
+        $sicknessMonitoring = $sickRecords->groupBy('employee_id')->map(function ($records) {
+            $first = $records->first();
+
+            return [
+                'employee_id' => (int) $first->employee_id,
+                'name' => trim($first->first_name.' '.$first->last_name),
+                // number of separate sick days logged - a simple proxy for
+                // absence frequency, not a full Bradford Factor calculation.
+                'occurrences' => $records->count(),
+                'days' => $records->sum(fn ($record) => $record->full ? 1 : 0.5),
+            ];
+        })->sortByDesc('days')->values();
+
+        return [
+            'off_today' => $offToday->map(fn ($row) => [
+                'employee_id' => $row->employee_id,
+                'name' => trim($row->first_name.' '.$row->last_name),
+                'type' => $row->type,
+                'full' => (bool) $row->full,
+            ])->values(),
+            'upcoming' => $upcoming->map(fn ($row) => [
+                'employee_id' => $row->employee_id,
+                'name' => trim($row->first_name.' '.$row->last_name),
+                'date' => Carbon::parse($row->planned_date)->format('M j'),
+                'type' => $row->type,
+                'full' => (bool) $row->full,
+            ])->values(),
+            'sickness_monitoring' => $sicknessMonitoring,
+        ];
+    }
 }

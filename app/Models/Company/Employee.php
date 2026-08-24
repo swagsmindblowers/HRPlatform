@@ -823,6 +823,32 @@ class Employee extends Model
         $currentDate = Carbon::now();
         $daysInYear = DateHelper::getNumberOfDaysInYear($currentDate);
         $yearCompletionRate = $currentDate->dayOfYear * 100 / $daysInYear;
+        $startOfYear = $currentDate->copy()->startOfYear();
+
+        $plannedHolidays = $this->plannedHolidays()
+            ->orderBy('planned_date', 'desc')
+            ->get();
+
+        $takenThisYear = $plannedHolidays->filter(function ($holiday) use ($startOfYear, $currentDate) {
+            return $holiday->planned_date->between($startOfYear, $currentDate);
+        });
+
+        $daysTakenSoFarThisYear = $takenThisYear->sum(function ($holiday) {
+            return $holiday->full ? 1 : 0.5;
+        });
+
+        $lastTaken = $takenThisYear->first();
+
+        $upcoming = $plannedHolidays->filter(function ($holiday) use ($currentDate) {
+            return $holiday->planned_date->greaterThan($currentDate);
+        })->sortBy('planned_date')->values();
+
+        $estimatedBalanceEndOfYear = round(
+            $this->holiday_balance + $numberOfDaysLeftToEarn - $upcoming->sum(function ($holiday) {
+                return $holiday->full ? 1 : 0.5;
+            }),
+            1
+        );
 
         return [
             'current_balance_round' => round($this->holiday_balance, 0, PHP_ROUND_HALF_DOWN),
@@ -831,6 +857,30 @@ class Employee extends Model
             'amount_of_allowed_holidays' => $this->amount_of_allowed_holidays,
             'number_holidays_left_to_earn_this_year' => round($numberOfDaysLeftToEarn, 1),
             'holidays_earned_each_month' => round($holidaysEarnedEachMonth, 1),
+            'days_taken_so_far_this_year' => $daysTakenSoFarThisYear,
+            'last_taken' => (! $lastTaken) ? null : [
+                'id' => $lastTaken->id,
+                'date' => DateHelper::formatDate($lastTaken->planned_date),
+                'type' => $lastTaken->type,
+            ],
+            'estimated_balance_end_of_year' => $estimatedBalanceEndOfYear,
+            'upcoming' => $upcoming->map(function ($holiday) {
+                return [
+                    'id' => $holiday->id,
+                    'date' => DateHelper::formatDate($holiday->planned_date),
+                    'raw_date' => $holiday->planned_date->format('Y-m-d'),
+                    'type' => $holiday->type,
+                    'full' => $holiday->full,
+                ];
+            })->values(),
+            'recent' => $takenThisYear->take(5)->map(function ($holiday) {
+                return [
+                    'id' => $holiday->id,
+                    'date' => DateHelper::formatDate($holiday->planned_date),
+                    'type' => $holiday->type,
+                    'full' => $holiday->full,
+                ];
+            })->values(),
         ];
     }
 

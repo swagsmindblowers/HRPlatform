@@ -13,6 +13,8 @@
 
     <discipline-case :data="disciplineCases" />
 
+    <absences :data="absences" />
+
     <timesheets
       :data="employeesWithoutManagersWithPendingTimesheets"
       :statistics="statisticsAboutTimesheets"
@@ -23,6 +25,7 @@
 <script>
 import Timesheets from '@/Pages/Dashboard/HR/Partials/Timesheets';
 import DisciplineCase from '@/Pages/Dashboard/HR/Partials/DisciplineCase';
+import Absences from '@/Pages/Dashboard/HR/Partials/Absences';
 import Layout from '@/Shared/Layout';
 import DashboardMenu from '@/Pages/Dashboard/Partials/DashboardMenu';
 
@@ -30,6 +33,7 @@ export default {
   components: {
     Timesheets,
     DisciplineCase,
+    Absences,
     Layout,
     DashboardMenu,
   },
@@ -52,6 +56,10 @@ export default {
       default: null,
     },
     disciplineCases: {
+      type: Object,
+      default: null,
+    },
+    absences: {
       type: Object,
       default: null,
     },

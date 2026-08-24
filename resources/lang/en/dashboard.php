@@ -358,4 +358,15 @@ return [
     'hr_discipline_case_show_case_event_deleted' => 'The event has been deleted.',
     'hr_discipline_case_show_case_toggled' => 'The case has been updated.',
 
+    'hr_absences_title' => 'Absences',
+    'hr_absences_off_today_title' => 'Off today',
+    'hr_absences_off_today_blank' => 'Everyone is in today.',
+    'hr_absences_upcoming_title' => 'Upcoming (next 14 days)',
+    'hr_absences_upcoming_blank' => 'No time off logged for the next two weeks.',
+    'hr_absences_sickness_title' => 'Sickness monitoring (trailing 12 months)',
+    'hr_absences_sickness_blank' => 'No sick days logged in the last 12 months.',
+    'hr_absences_sickness_name' => 'Employee',
+    'hr_absences_sickness_occurrences' => 'Occurrences',
+    'hr_absences_sickness_days' => 'Days',
+
 ];
