@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Company\Ai;
 
 use Exception;
-use Anthropic\Client;
 use Illuminate\Http\Request;
 use App\Helpers\InstanceHelper;
-use Anthropic\Messages\TextBlock;
 use Illuminate\Http\JsonResponse;
 use App\Services\Ai\AiToolRegistry;
-use Anthropic\Messages\ToolUseBlock;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class AiAssistantController extends Controller
 {
@@ -21,7 +19,8 @@ class AiAssistantController extends Controller
     private const MAX_TOOL_ITERATIONS = 6;
 
     /**
-     * Chat with the "Ask LaunchHR" assistant. Stateless on the server - the
+     * Chat with the "Ask LaunchHR" assistant, backed by DeepSeek's
+     * OpenAI-compatible chat completions API. Stateless on the server - the
      * client sends the conversation history back on every request.
      *
      * @param Request $request
@@ -33,9 +32,9 @@ class AiAssistantController extends Controller
         $company = InstanceHelper::getLoggedCompany();
         $employee = InstanceHelper::getLoggedEmployee();
 
-        if (! config('services.anthropic.api_key')) {
+        if (! config('services.deepseek.api_key')) {
             return response()->json([
-                'error' => 'The AI assistant isn\'t configured yet - ANTHROPIC_API_KEY is missing.',
+                'error' => 'The AI assistant isn\'t configured yet - DEEPSEEK_API_KEY is missing.',
             ], 503);
         }
 
@@ -43,65 +42,79 @@ class AiAssistantController extends Controller
         $messages = $history;
         $messages[] = ['role' => 'user', 'content' => $request->input('message')];
 
-        $client = new Client(apiKey: config('services.anthropic.api_key'));
+        // System prompt is only needed on the very first turn - the API is
+        // stateless, but since we resend full history every time, prepending
+        // it here each turn (rather than storing it in $history) keeps the
+        // client-facing history free of it.
+        $conversation = array_merge([
+            ['role' => 'system', 'content' => $this->systemPrompt()],
+        ], $messages);
 
         $iterations = 0;
-        $response = $this->send($client, $messages);
+        $response = $this->send($conversation);
 
-        while ($response->stopReason === 'tool_use' && $iterations < self::MAX_TOOL_ITERATIONS) {
+        while (! empty($response['choices'][0]['message']['tool_calls']) && $iterations < self::MAX_TOOL_ITERATIONS) {
             $iterations++;
-            $toolResults = [];
+            $assistantMessage = $response['choices'][0]['message'];
+            $conversation[] = $assistantMessage;
+            $messages[] = $assistantMessage;
 
-            foreach ($response->content as $block) {
-                if ($block instanceof ToolUseBlock) {
-                    try {
-                        $result = AiToolRegistry::dispatch($block->name, $block->input, $employee, $company);
-                        $content = json_encode($result);
-                    } catch (Exception $e) {
-                        $content = 'Error: '.$e->getMessage();
-                    }
+            foreach ($assistantMessage['tool_calls'] as $toolCall) {
+                $arguments = json_decode($toolCall['function']['arguments'] ?? '{}', true) ?? [];
 
-                    $toolResults[] = [
-                        'type' => 'tool_result',
-                        'toolUseID' => $block->id,
-                        'content' => $content,
-                    ];
+                try {
+                    $result = AiToolRegistry::dispatch($toolCall['function']['name'], $arguments, $employee, $company);
+                    $content = json_encode($result);
+                } catch (Exception $e) {
+                    $content = 'Error: '.$e->getMessage();
                 }
+
+                $toolResultMessage = [
+                    'role' => 'tool',
+                    'tool_call_id' => $toolCall['id'],
+                    'content' => $content,
+                ];
+
+                $conversation[] = $toolResultMessage;
+                $messages[] = $toolResultMessage;
             }
 
-            $messages[] = ['role' => 'assistant', 'content' => $response->content];
-            $messages[] = ['role' => 'user', 'content' => $toolResults];
-
-            $response = $this->send($client, $messages);
+            $response = $this->send($conversation);
         }
 
-        $text = '';
-        foreach ($response->content as $block) {
-            if ($block instanceof TextBlock) {
-                $text .= $block->text;
-            }
-        }
-
-        $messages[] = ['role' => 'assistant', 'content' => $response->content];
+        $finalMessage = $response['choices'][0]['message'] ?? ['content' => ''];
+        $messages[] = ['role' => 'assistant', 'content' => $finalMessage['content'] ?? ''];
 
         return response()->json([
-            'reply' => $text,
+            'reply' => $finalMessage['content'] ?? '',
             'history' => $messages,
         ]);
     }
 
-    private function send(Client $client, array $messages)
+    private function send(array $messages): array
     {
-        return $client->messages->create(
-            model: 'claude-opus-5',
-            maxTokens: 4096,
-            system: 'You are the AI assistant embedded in LaunchHR, an HR platform. '
-                .'You can look up and manage the acting employee\'s time off (holidays, sick days, PTO), '
-                .'and, for HR/admins, the company-wide absence report. '
-                .'Only act within the tools you\'re given - never claim to have done something you didn\'t call a tool for. '
-                .'Keep responses concise and conversational.',
-            tools: AiToolRegistry::definitions(),
-            messages: $messages,
-        );
+        $response = Http::withToken(config('services.deepseek.api_key'))
+            ->timeout(30)
+            ->post('https://api.deepseek.com/chat/completions', [
+                'model' => config('services.deepseek.model'),
+                'messages' => $messages,
+                'tools' => AiToolRegistry::openAiDefinitions(),
+                'stream' => false,
+            ]);
+
+        if ($response->failed()) {
+            throw new Exception('DeepSeek API request failed: '.$response->body());
+        }
+
+        return $response->json();
+    }
+
+    private function systemPrompt(): string
+    {
+        return 'You are the AI assistant embedded in LaunchHR, an HR platform. '
+            .'You can look up and manage the acting employee\'s time off (holidays, sick days, PTO), '
+            .'and, for HR/admins, the company-wide absence report. '
+            .'Only act within the tools you\'re given - never claim to have done something you didn\'t call a tool for. '
+            .'Keep responses concise and conversational.';
     }
 }

@@ -101,8 +101,9 @@ return [
         'redirect' => env('TWITTER_REDIRECT_URI', '/auth/twitter/callback'),
     ],
 
-    'anthropic' => [
-        'api_key' => env('ANTHROPIC_API_KEY'),
+    'deepseek' => [
+        'api_key' => env('DEEPSEEK_API_KEY'),
+        'model' => env('DEEPSEEK_MODEL', 'deepseek-chat'),
     ],
 
 ];

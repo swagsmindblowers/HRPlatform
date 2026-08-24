@@ -34,15 +34,18 @@ class AiToolRegistry
     }
 
     /**
-     * Definitions in the shape the Anthropic PHP SDK expects (camelCase
-     * `inputSchema`).
+     * Definitions in the OpenAI-compatible "function" tool shape used by the
+     * DeepSeek chat completions API (and most other LLM providers).
      */
-    public static function definitions(): array
+    public static function openAiDefinitions(): array
     {
         return collect(self::toolClasses())->map(fn ($class) => [
-            'name' => $class::name(),
-            'description' => $class::description(),
-            'inputSchema' => $class::schema(),
+            'type' => 'function',
+            'function' => [
+                'name' => $class::name(),
+                'description' => $class::description(),
+                'parameters' => $class::schema(),
+            ],
         ])->values()->all();
     }
 
