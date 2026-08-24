@@ -42,7 +42,9 @@ class DestroyTimeOff extends BaseService
             ->canBypassPermissionLevelIfEmployee($data['employee_id'])
             ->canExecuteService();
 
-        $holiday = EmployeePlannedHoliday::findOrFail($data['employee_planned_holiday_id']);
+        $holiday = EmployeePlannedHoliday::where('id', $data['employee_planned_holiday_id'])
+            ->where('employee_id', $data['employee_id'])
+            ->firstOrFail();
         $holiday->delete();
 
         LogAccountAudit::dispatch([

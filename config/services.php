@@ -101,4 +101,8 @@ return [
         'redirect' => env('TWITTER_REDIRECT_URI', '/auth/twitter/callback'),
     ],
 
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+    ],
+
 ];

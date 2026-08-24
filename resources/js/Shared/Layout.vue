@@ -250,6 +250,8 @@
 
     <toaster />
 
+    <ai-assistant v-if="!noMenu && $page.props.auth.company" />
+
     <div class="mt5 mb4 cf mw7 center tc f7">
       <ul class="list ma0">
         <li class="di">Thanks for using LaunchHR!</li>
@@ -263,6 +265,7 @@ import UserMenu from '@/Shared/UserMenu';
 import LoadingButton from '@/Shared/LoadingButton';
 import NotificationsComponent from '@/Shared/Notifications';
 import Toaster from '@/Shared/Toaster';
+import AiAssistant from '@/Shared/AiAssistant';
 import BallPulseLoader from 'vue-loaders/dist/loaders/ball-pulse';
 
 export default {
@@ -271,6 +274,7 @@ export default {
     LoadingButton,
     NotificationsComponent,
     Toaster,
+    AiAssistant,
     'ball-pulse-loader': BallPulseLoader.component,
   },
 

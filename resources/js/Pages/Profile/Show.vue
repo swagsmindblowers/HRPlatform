@@ -11,6 +11,8 @@
         <two-factor-authentication-form class="mt1" />
 
         <logout-other-browser-sessions-form :sessions="sessions" class="mt1" />
+
+        <api-tokens-manager class="mt1" />
       </div>
     </div>
   </layout>
@@ -23,6 +25,7 @@ import TwoFactorAuthenticationForm from './Partials/TwoFactorAuthenticationForm'
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import UpdateLocale from './Partials/UpdateLocale';
+import ApiTokensManager from './Partials/ApiTokensManager';
 
 export default {
 
@@ -33,6 +36,7 @@ export default {
     UpdatePasswordForm,
     UpdateProfileInformationForm,
     UpdateLocale,
+    ApiTokensManager,
   },
 
   props: {

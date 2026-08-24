@@ -40,6 +40,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('help', 'HelpController@toggle');
     Route::post('locale', 'User\\LocaleController@update');
 
+    // personal access tokens, for connecting the MCP server to Claude/other LLM clients
+    Route::get('user/api-tokens', 'ApiTokenController@index');
+    Route::post('user/api-tokens', 'ApiTokenController@store');
+    Route::delete('user/api-tokens/{token}', 'ApiTokenController@destroy');
+
     Route::get('company/create', 'Company\\CompanyController@create');
     Route::post('company/store', 'Company\\CompanyController@store')->name('company.store');
     Route::get('company/join', 'Company\\CompanyController@join');
@@ -49,6 +54,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware(['company'])->prefix('{company}')->group(function () {
         Route::get('welcome', 'WelcomeController@index')->name('welcome');
         Route::post('hide', 'WelcomeController@hide');
+
+        // AI assistant
+        Route::post('ai/chat', 'Company\\Ai\\AiAssistantController@chat')->name('ai.chat');
 
         Route::get('notifications', 'User\\Notification\\NotificationController@index');
         Route::post('notifications/read', 'User\\Notification\\MarkNotificationAsReadController@store');
