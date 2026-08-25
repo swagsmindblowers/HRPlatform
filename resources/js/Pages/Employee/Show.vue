@@ -53,6 +53,11 @@
             :positions="positions"
           />
 
+          <equity-grants
+            :employee="employee"
+            :permissions="permissions"
+          />
+
           <skills
             :employee="employee"
             :permissions="permissions"
@@ -84,6 +89,7 @@ import Question from '@/Pages/Employee/Partials/Question';
 import Skills from '@/Pages/Employee/Partials/Skills';
 import ECoffee from '@/Pages/Employee/Partials/ECoffee';
 import EmployeePastPositions from '@/Pages/Employee/Partials/EmployeePastPositions';
+import EquityGrants from '@/Pages/Employee/Partials/EquityGrants';
 
 export default {
   components: {
@@ -97,6 +103,7 @@ export default {
     Skills,
     ECoffee,
     EmployeePastPositions,
+    EquityGrants,
   },
 
   props: {

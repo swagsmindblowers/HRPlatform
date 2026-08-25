@@ -138,6 +138,16 @@ class Employee extends Model
     }
 
     /**
+     * Get all the equity grants that belong to this employee.
+     *
+     * @return HasMany
+     */
+    public function equityGrants()
+    {
+        return $this->hasMany(EmployeeEquityGrant::class);
+    }
+
+    /**
      * Get the employee logs record associated with the employee.
      *
      * @return HasMany

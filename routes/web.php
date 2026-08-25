@@ -173,6 +173,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         Route::prefix('employees')->group(function () {
             Route::get('', 'Company\\Employee\\EmployeeController@index')->name('employees.index');
+            Route::get('org-chart', 'Company\\Employee\\OrgChart\\OrgChartController@index')->name('employees.orgchart');
 
             // common to all pages
             Route::resource('{employee}/team', 'Company\\Employee\\EmployeeTeamController')->only([
@@ -193,6 +194,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::resource('{employee}/description', 'Company\\Employee\\EmployeeDescriptionController')->only([
                 'store', 'destroy',
             ]);
+            Route::get('{employee}/equity', 'Company\\Employee\\Equity\\EmployeeEquityController@index');
+            Route::post('{employee}/equity', 'Company\\Employee\\Equity\\EmployeeEquityController@store');
+            Route::delete('{employee}/equity/{equityGrant}', 'Company\\Employee\\Equity\\EmployeeEquityController@destroy');
 
             // Presentation tab
             Route::get('{employee}', 'Company\\Employee\\Presentation\\EmployeePresentationController@show')->name('employees.show');

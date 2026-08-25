@@ -195,6 +195,16 @@ class PermissionHelper
             $canDeleteWorkLog = true;
         }
 
+        // can see equity grants of the given employee - self or HR/admin only,
+        // never a manager (equity is compensation, not org-chart information)
+        $canSeeEquity = $loggedEmployee->permission_level <= 200;
+        if ($loggedEmployee->id == $employee->id) {
+            $canSeeEquity = true;
+        }
+
+        // can manage (grant/revoke) equity of the given employee - HR/admin only
+        $canManageEquity = $loggedEmployee->permission_level <= 200;
+
         return [
             'can_see_full_birthdate' => $canSeeFullBirthdate,
             'can_see_expenses' => $canSeeExpenses,
@@ -207,6 +217,8 @@ class PermissionHelper
             'can_manage_description' => $canManageDescription,
             'can_see_work_from_home_history' => $canSeeWorkFromHomeHistory,
             'can_see_work_log_history' => $canSeeWorkLogHistory,
+            'can_see_equity' => $canSeeEquity,
+            'can_manage_equity' => $canManageEquity,
             'can_see_hardware' => $canSeeHardware,
             'can_see_software' => $canSeeSoftware,
             'can_edit_profile' => $canEditProfile,

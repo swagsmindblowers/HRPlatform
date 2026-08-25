@@ -6,6 +6,8 @@ use Exception;
 use App\Models\Company\Company;
 use App\Models\Company\Employee;
 use App\Services\Ai\Tools\AiTool;
+use App\Services\Ai\Tools\GetMyEquityTool;
+use App\Services\Ai\Tools\GetOrgChartTool;
 use App\Services\Ai\Tools\CancelTimeOffTool;
 use App\Services\Ai\Tools\ListMyTimeOffTool;
 use App\Services\Ai\Tools\RequestTimeOffTool;
@@ -30,6 +32,8 @@ class AiToolRegistry
             CancelTimeOffTool::class,
             GetAbsenceReportTool::class,
             SearchEmployeesTool::class,
+            GetOrgChartTool::class,
+            GetMyEquityTool::class,
         ];
     }
 

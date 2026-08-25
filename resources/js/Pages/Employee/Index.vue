@@ -19,6 +19,9 @@
             <span class="dib mb3 di-l">
               {{ $tc('account.employees_number_employees', employees.length, { company: $page.props.auth.company.name, count: employees.length}) }}
             </span>
+            <inertia-link class="fr btn" :href="'/' + $page.props.auth.company.id + '/employees/org-chart'" data-cy="org-chart-link">
+              {{ $t('employee.orgchart_title') }}
+            </inertia-link>
           </p>
 
           <ul class="list pl0 mt0 mb0 center">
