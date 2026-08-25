@@ -48,8 +48,10 @@ class EmployeeShowViewHelper
             'twitter_handle' => $employee->twitter_handle,
             'slack_handle' => $employee->slack_handle,
             'locked' => $employee->locked,
+            'employment_type' => $employee->employment_type,
+            'is_contractor' => $employee->isContractor(),
             'is_current_user' => $employee->id === $loggedEmployee->id,
-            'holidays' => $employee->getHolidaysInformation(),
+            'holidays' => $employee->isContractor() ? null : $employee->getHolidaysInformation(),
             'birthdate' => (! $employee->birthdate) ? null :
                 ($permissions['can_see_full_birthdate'] ? [
                     'date' => DateHelper::formatDate($employee->birthdate),

@@ -93,13 +93,17 @@
         🌴
       </span> {{ $t('employee.holidays_title') }}
     </span>
-    <img v-show="canManage" loading="lazy" src="/img/plus_button.svg" class="box-plus-button absolute br-100 pa2 bg-white pointer" data-cy="add-holiday-button"
+    <img v-show="canManage && !employee.is_contractor" loading="lazy" src="/img/plus_button.svg" class="box-plus-button absolute br-100 pa2 bg-white pointer" data-cy="add-holiday-button"
          width="22"
          height="22" alt="add button"
          @click.prevent="openModal"
     />
 
-    <div class="br3 bg-white box z-1 pa3">
+    <div v-if="employee.is_contractor" class="br3 bg-white box z-1 pa3">
+      <p class="f7 grey tc mv0">{{ $t('employee.holidays_contractor_no_pto') }}</p>
+    </div>
+
+    <div v-else class="br3 bg-white box z-1 pa3">
       <!-- Available balance -->
       <div class="flex justify-between mb4 mt3">
         <div class="w-50 f4 fw3">
@@ -270,7 +274,7 @@ export default {
     return {
       showModal: false,
       loadingState: '',
-      upcoming: this.employee.holidays.upcoming || [],
+      upcoming: (this.employee.holidays && this.employee.holidays.upcoming) || [],
       form: {
         date: null,
         type: 'holiday',

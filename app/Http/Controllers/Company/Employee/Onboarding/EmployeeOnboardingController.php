@@ -41,16 +41,15 @@ class EmployeeOnboardingController extends Controller
     public function store(Request $request, int $companyId, int $employeeId): JsonResponse
     {
         $loggedEmployee = InstanceHelper::getLoggedEmployee();
+        $employee = Employee::where('company_id', $companyId)->findOrFail($employeeId);
 
         (new CreateOnboardingChecklistForEmployee)->execute([
             'company_id' => $companyId,
             'author_id' => $loggedEmployee->id,
             'employee_id' => $employeeId,
             'jurisdiction' => $request->input('jurisdiction'),
-            'is_contractor' => $request->input('is_contractor', false),
+            'is_contractor' => $employee->isContractor(),
         ]);
-
-        $employee = Employee::where('company_id', $companyId)->findOrFail($employeeId);
 
         return response()->json([
             'data' => EmployeeOnboardingViewHelper::checklist($employee),

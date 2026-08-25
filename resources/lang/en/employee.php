@@ -150,6 +150,9 @@ return [
     'software_no_info' => 'No software have been assigned yet.',
     'recent_ship_title' => 'Accomplishments',
     'recent_ship_list_blank' => 'This person has not done any accomplishments yet.',
+    'employment_type_employee' => 'Employee',
+    'employment_type_contractor' => 'Contractor',
+    'employment_type_saved' => 'Employment type updated.',
     'onboarding_title' => 'Onboarding',
     'onboarding_not_started' => 'No onboarding checklist has been started yet.',
     'onboarding_start' => 'Start onboarding checklist',
@@ -226,6 +229,7 @@ return [
     'worklog_filter_month' => 'Choose a month',
 
     'holidays_title' => 'Time off',
+    'holidays_contractor_no_pto' => 'Contractors don\'t accrue company PTO.',
     'holidays_available_balance' => 'Available balance',
     'holidays_taken_so_far' => 'Days taken so far this year',
     'holidays_earned_each_month' => 'New holidays earned each month',

@@ -185,6 +185,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::resource('{employee}/employeestatuses', 'Company\\Employee\\EmployeeStatusController')->only([
                 'index', 'store', 'destroy',
             ]);
+            Route::post('{employee}/employmenttype', 'Company\\Employee\\EmployeeEmploymentTypeController@store');
             Route::resource('{employee}/timeoff', 'Company\\Employee\\TimeOffController')->only([
                 'store', 'destroy',
             ]);

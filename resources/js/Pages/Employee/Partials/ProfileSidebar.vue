@@ -29,6 +29,11 @@
       :permissions="permissions"
     />
 
+    <employment-type
+      :employee="employee"
+      :permissions="permissions"
+    />
+
     <employee-contact
       :employee="employee"
       :permissions="permissions"
@@ -45,6 +50,7 @@
 import PersonalDescription from '@/Pages/Employee/Partials/PersonalDescription';
 import EmployeeImportantDates from '@/Pages/Employee/Partials/EmployeeImportantDates';
 import EmployeeStatus from '@/Pages/Employee/Partials/EmployeeStatus';
+import EmploymentType from '@/Pages/Employee/Partials/EmploymentType';
 import EmployeeContact from '@/Pages/Employee/Partials/EmployeeContact';
 import EmployeeGenderPronoun from '@/Pages/Employee/Partials/EmployeeGenderPronoun';
 import ProfileActions from '@/Pages/Employee/Partials/ProfileActions';
@@ -55,6 +61,7 @@ export default {
     PersonalDescription,
     EmployeeImportantDates,
     EmployeeStatus,
+    EmploymentType,
     EmployeeContact,
     EmployeeGenderPronoun,
     ProfileActions,

@@ -27,6 +27,9 @@ class Employee extends Model
 {
     use HasFactory;
 
+    const EMPLOYMENT_TYPE_EMPLOYEE = 'employee';
+    const EMPLOYMENT_TYPE_CONTRACTOR = 'contractor';
+
     protected $table = 'employees';
 
     /**
@@ -52,6 +55,7 @@ class Employee extends Model
         'invitation_used_at',
         'consecutive_worklog_missed',
         'employee_status_id',
+        'employment_type',
         'uuid',
         'phone_number',
         'locked',
@@ -145,6 +149,18 @@ class Employee extends Model
     public function equityGrants()
     {
         return $this->hasMany(EmployeeEquityGrant::class);
+    }
+
+    /**
+     * Contractors don't accrue company PTO and follow a different
+     * onboarding path (no I-9/right-to-work step, a contractor agreement
+     * step instead).
+     *
+     * @return bool
+     */
+    public function isContractor(): bool
+    {
+        return $this->employment_type === self::EMPLOYMENT_TYPE_CONTRACTOR;
     }
 
     /**
