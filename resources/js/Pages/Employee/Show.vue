@@ -53,6 +53,11 @@
             :positions="positions"
           />
 
+          <onboarding
+            :employee="employee"
+            :permissions="permissions"
+          />
+
           <equity-grants
             :employee="employee"
             :permissions="permissions"
@@ -90,6 +95,7 @@ import Skills from '@/Pages/Employee/Partials/Skills';
 import ECoffee from '@/Pages/Employee/Partials/ECoffee';
 import EmployeePastPositions from '@/Pages/Employee/Partials/EmployeePastPositions';
 import EquityGrants from '@/Pages/Employee/Partials/EquityGrants';
+import Onboarding from '@/Pages/Employee/Partials/Onboarding';
 
 export default {
   components: {
@@ -104,6 +110,7 @@ export default {
     ECoffee,
     EmployeePastPositions,
     EquityGrants,
+    Onboarding,
   },
 
   props: {

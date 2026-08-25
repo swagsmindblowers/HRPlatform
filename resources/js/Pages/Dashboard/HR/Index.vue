@@ -15,6 +15,8 @@
 
     <absences :data="absences" />
 
+    <onboarding :data="onboarding" />
+
     <timesheets
       :data="employeesWithoutManagersWithPendingTimesheets"
       :statistics="statisticsAboutTimesheets"
@@ -26,6 +28,7 @@
 import Timesheets from '@/Pages/Dashboard/HR/Partials/Timesheets';
 import DisciplineCase from '@/Pages/Dashboard/HR/Partials/DisciplineCase';
 import Absences from '@/Pages/Dashboard/HR/Partials/Absences';
+import Onboarding from '@/Pages/Dashboard/HR/Partials/Onboarding';
 import Layout from '@/Shared/Layout';
 import DashboardMenu from '@/Pages/Dashboard/Partials/DashboardMenu';
 
@@ -34,6 +37,7 @@ export default {
     Timesheets,
     DisciplineCase,
     Absences,
+    Onboarding,
     Layout,
     DashboardMenu,
   },
@@ -60,6 +64,10 @@ export default {
       default: null,
     },
     absences: {
+      type: Object,
+      default: null,
+    },
+    onboarding: {
       type: Object,
       default: null,
     },

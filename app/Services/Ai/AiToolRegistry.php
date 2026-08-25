@@ -13,6 +13,8 @@ use App\Services\Ai\Tools\ListMyTimeOffTool;
 use App\Services\Ai\Tools\RequestTimeOffTool;
 use App\Services\Ai\Tools\SearchEmployeesTool;
 use App\Services\Ai\Tools\GetAbsenceReportTool;
+use App\Services\Ai\Tools\CompleteOnboardingItemTool;
+use App\Services\Ai\Tools\GetOnboardingChecklistTool;
 
 /**
  * Central registry of every tool the AI assistant and the MCP server can
@@ -34,6 +36,8 @@ class AiToolRegistry
             SearchEmployeesTool::class,
             GetOrgChartTool::class,
             GetMyEquityTool::class,
+            GetOnboardingChecklistTool::class,
+            CompleteOnboardingItemTool::class,
         ];
     }
 

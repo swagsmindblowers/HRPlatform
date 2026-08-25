@@ -197,6 +197,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             Route::get('{employee}/equity', 'Company\\Employee\\Equity\\EmployeeEquityController@index');
             Route::post('{employee}/equity', 'Company\\Employee\\Equity\\EmployeeEquityController@store');
             Route::delete('{employee}/equity/{equityGrant}', 'Company\\Employee\\Equity\\EmployeeEquityController@destroy');
+            Route::get('{employee}/onboarding', 'Company\\Employee\\Onboarding\\EmployeeOnboardingController@index');
+            Route::post('{employee}/onboarding', 'Company\\Employee\\Onboarding\\EmployeeOnboardingController@store');
+            Route::post('{employee}/onboarding/{item}/complete', 'Company\\Employee\\Onboarding\\EmployeeOnboardingController@completeItem');
 
             // Presentation tab
             Route::get('{employee}', 'Company\\Employee\\Presentation\\EmployeePresentationController@show')->name('employees.show');

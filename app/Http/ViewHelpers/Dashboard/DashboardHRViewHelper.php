@@ -7,6 +7,7 @@ use App\Helpers\ImageHelper;
 use App\Models\Company\Company;
 use App\Models\Company\Timesheet;
 use Illuminate\Support\Facades\DB;
+use App\Models\Company\EmployeeOnboardingChecklistItem;
 
 class DashboardHRViewHelper
 {
@@ -159,6 +160,53 @@ class DashboardHRViewHelper
                 'full' => (bool) $row->full,
             ])->values(),
             'sickness_monitoring' => $sicknessMonitoring,
+        ];
+    }
+
+    /**
+     * Get company-wide onboarding compliance deadlines: overdue items and
+     * items due in the next 14 days, so HR can spot what's about to lapse
+     * (right to work checks, pension auto-enrolment windows, I-9s, etc.).
+     *
+     * @param Company $company
+     * @return array
+     */
+    public static function onboarding(Company $company): array
+    {
+        $today = Carbon::now();
+        $in14Days = Carbon::now()->addDays(14);
+
+        $items = EmployeeOnboardingChecklistItem::whereHas('checklist.employee', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        })
+            ->whereNull('completed_at')
+            ->whereNotNull('due_date')
+            ->whereDate('due_date', '<=', $in14Days->format('Y-m-d'))
+            ->with('checklist.employee')
+            ->orderBy('due_date')
+            ->get();
+
+        $format = function ($item) {
+            $employee = $item->checklist->employee;
+
+            return [
+                'id' => $item->id,
+                'employee_id' => $employee->id,
+                'employee_name' => $employee->name,
+                'title' => $item->title,
+                'type' => $item->type,
+                'is_legally_mandated' => $item->is_legally_mandated,
+                'due_date' => $item->due_date->format('M j'),
+                'url' => route('employees.show', [
+                    'company' => $company,
+                    'employee' => $employee,
+                ]),
+            ];
+        };
+
+        return [
+            'overdue' => $items->filter(fn ($item) => $item->due_date->lt($today))->map($format)->values(),
+            'upcoming' => $items->filter(fn ($item) => $item->due_date->gte($today))->map($format)->values(),
         ];
     }
 }

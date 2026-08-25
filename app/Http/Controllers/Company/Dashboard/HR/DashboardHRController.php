@@ -44,6 +44,7 @@ class DashboardHRController extends Controller
             'statisticsAboutTimesheets' => $statisticsAboutTimesheets,
             'disciplineCases' => DashboardHRViewHelper::disciplineCases($company),
             'absences' => DashboardHRViewHelper::absences($company),
+            'onboarding' => DashboardHRViewHelper::onboarding($company),
         ]);
     }
 }

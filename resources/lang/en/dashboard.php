@@ -369,4 +369,11 @@ return [
     'hr_absences_sickness_occurrences' => 'Occurrences',
     'hr_absences_sickness_days' => 'Days',
 
+    'hr_onboarding_title' => 'Onboarding & compliance deadlines',
+    'hr_onboarding_overdue_title' => 'Overdue',
+    'hr_onboarding_overdue_blank' => 'Nothing overdue.',
+    'hr_onboarding_upcoming_title' => 'Upcoming (next 14 days)',
+    'hr_onboarding_upcoming_blank' => 'No deadlines in the next two weeks.',
+    'hr_onboarding_legally_mandated' => 'Legally mandated',
+
 ];
