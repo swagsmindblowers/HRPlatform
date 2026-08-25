@@ -6,9 +6,11 @@
   gap: 10px;
   padding: 10px 18px;
   border-radius: 999px;
-  background-color: var(--color-paper-raised);
+  background: color-mix(in srgb, var(--color-paper-raised) 90%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--color-steel-line);
-  box-shadow: 0 8px 20px rgba(29, 30, 39, 0.1);
+  box-shadow: var(--shadow-glass);
 }
 
 .mark {
@@ -16,6 +18,7 @@
   height: 20px;
   border-radius: 6px;
   background-color: var(--color-amber);
+  box-shadow: var(--shadow-glow);
   flex: none;
 }
 

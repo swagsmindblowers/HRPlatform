@@ -25,12 +25,18 @@
 }
 
 .main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   border-bottom: 1px solid var(--color-steel-line);
-  background-color: var(--color-paper-raised);
+  background: color-mix(in srgb, var(--color-paper-raised) 82%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .brand-mark {
   background-color: var(--color-amber);
+  box-shadow: var(--shadow-glow);
 }
 
 .nav-link {
@@ -128,7 +134,9 @@
             </inertia-link>
           </div>
         </div>
-        <div class="py-2 flex items-center">
+        <div class="py-2 flex items-center gap-1">
+          <theme-toggle />
+
           <notifications-component :notifications="notifications" />
 
           <user-menu :show-help-on-page="showHelpOnPage" />
@@ -266,6 +274,7 @@ import LoadingButton from '@/Shared/LoadingButton';
 import NotificationsComponent from '@/Shared/Notifications';
 import Toaster from '@/Shared/Toaster';
 import AiAssistant from '@/Shared/AiAssistant';
+import ThemeToggle from '@/Shared/ThemeToggle';
 import BallPulseLoader from 'vue-loaders/dist/loaders/ball-pulse';
 
 export default {
@@ -275,6 +284,7 @@ export default {
     NotificationsComponent,
     Toaster,
     AiAssistant,
+    ThemeToggle,
     'ball-pulse-loader': BallPulseLoader.component,
   },
 

@@ -1,8 +1,10 @@
 <style lang="scss" scoped>
 .menu {
   border: 1px solid var(--color-steel-line);
-  box-shadow: 0 8px 24px rgba(29, 30, 39, 0.12), 0 2px 6px rgba(29, 30, 39, 0.06);
-  background-color: var(--color-paper-raised);
+  box-shadow: var(--shadow-glass);
+  background: color-mix(in srgb, var(--color-paper-raised) 90%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   width: 220px;
   border-radius: 14px;
   padding: 6px;

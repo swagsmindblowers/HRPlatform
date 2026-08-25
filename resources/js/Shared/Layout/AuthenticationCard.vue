@@ -1,8 +1,10 @@
 <style lang="scss" scoped>
 .auth-card {
-  background-color: var(--color-paper-raised);
+  background: color-mix(in srgb, var(--color-paper-raised) 90%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--color-steel-line);
-  box-shadow: 0 1px 2px rgba(29, 30, 39, 0.04), 0 16px 40px rgba(29, 30, 39, 0.08);
+  box-shadow: var(--shadow-glass);
 }
 </style>
 

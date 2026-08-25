@@ -25,12 +25,13 @@
   &.add {
     background: var(--color-amber);
     border-color: var(--color-amber);
-    color: #1b1206;
+    color: #fff;
+    box-shadow: var(--shadow-glow);
 
     &:hover {
-      background-color: #cf6013;
-      border-color: #cf6013;
-      color: #1b1206;
+      background-color: var(--color-amber-ink);
+      border-color: var(--color-amber-ink);
+      color: #fff;
     }
   }
 
@@ -56,12 +57,12 @@
     top: 50%;
     left: 0;
     right: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--color-steel-line);
     z-index: -1;
   }
 
   span {
-    background-color: #f6fafd;
+    background-color: var(--color-paper);
   }
 
   a {
@@ -71,29 +72,29 @@
 }
 
 .btn-group {
-  box-shadow: 1px 0px 1px rgba(43, 45, 80, 0.16), -1px 1px 1px rgba(43, 45, 80, 0.16),
-    0px 1px 4px rgba(43, 45, 80, 0.18);
+  box-shadow: var(--shadow-glass);
   border-radius: 11px;
 }
 
 .btn-group span,
 .btn-group a {
-  background: #fff;
+  background: var(--color-paper-raised);
   border-bottom: 0;
-  border-right: 1px solid #e3e3e7;
-  color: $body-color;
+  border-right: 1px solid var(--color-steel-line);
+  color: var(--color-ink);
   text-decoration: none;
 }
 
 .btn-group span,
 .btn-group a:hover {
-  background-color: #d7e0e9;
+  background-color: var(--color-amber-tint);
   border-bottom: 0;
 }
 
 .btn-group span,
 .btn-group a.selected {
-  background: #d7e0e9;
+  background: var(--color-amber-tint);
+  color: var(--color-amber-ink);
   font-weight: 600;
 }
 

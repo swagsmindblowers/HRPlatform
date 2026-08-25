@@ -34,10 +34,12 @@
   max-width: calc(100vw - 48px);
   height: 480px;
   max-height: calc(100vh - 140px);
-  background: var(--color-paper-raised);
+  background: color-mix(in srgb, var(--color-paper-raised) 90%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--color-steel-line);
   border-radius: 16px;
-  box-shadow: 0 20px 48px rgba(29, 30, 39, 0.18);
+  box-shadow: var(--shadow-glass);
   display: flex;
   flex-direction: column;
   overflow: hidden;

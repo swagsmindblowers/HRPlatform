@@ -9,8 +9,8 @@
 @import 'grid';
 
 body {
-  background-color: $body-bg;
-  color: $body-color;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: $font-family-sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -39,13 +39,16 @@ input:invalid {
 hr {
   margin-top: 1rem;
   border: 0;
-  border-top: 1px solid rgba(34, 34, 48, 0.1);
+  border-top: 1px solid var(--color-steel-line);
 }
 
 .box {
+  background: color-mix(in srgb, var(--color-paper-raised) 90%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--color-steel-line);
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(29, 30, 39, 0.04), 0 8px 20px rgba(29, 30, 39, 0.06);
+  box-shadow: var(--shadow-glass);
 }
 
 .box-plus-button {
@@ -104,24 +107,26 @@ input[type='email'],
 input[type='password'],
 textarea {
   &::placeholder {
-    background-color: #fafbfc;
+    background-color: transparent;
   }
 
   &:focus {
-    background-color: #fff;
+    background-color: var(--color-paper-raised);
     &::placeholder {
-      background-color: #fff;
+      background-color: transparent;
     }
   }
 }
 
 // popmenu
 .popupmenu {
-  border: 1px solid rgba(27, 31, 35, 0.15);
-  box-shadow: 0 3px 12px rgba(27, 31, 35, 0.15);
+  border: 1px solid var(--color-steel-line);
+  box-shadow: var(--shadow-glass);
   right: 29px;
   top: 33px;
-  background-color: #fff;
+  background: color-mix(in srgb, var(--color-paper-raised) 90%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .popupmenu:after,
@@ -133,14 +138,14 @@ textarea {
 
 .popupmenu:after {
   border: 7px solid transparent;
-  border-bottom-color: #fff;
+  border-bottom-color: var(--color-paper-raised);
   left: 10px;
   top: -14px;
 }
 
 .popupmenu:before {
   border: 8px solid transparent;
-  border-bottom-color: rgba(27, 31, 35, 0.15);
+  border-bottom-color: var(--color-steel-line);
   left: 9px;
   top: -16px;
 }
