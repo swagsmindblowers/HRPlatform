@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Redirect;
 
-Route::get('/', function () {
-    return Redirect::route('login');
-})->name('default');
+Route::get('/', 'LandingController@index')->name('default');
 
 Route::get('invite/employee/{link}', 'Auth\\UserInvitationController@check');
 Route::post('invite/employee/{link}/join', 'Auth\\UserInvitationController@join')->name('invitation.join');

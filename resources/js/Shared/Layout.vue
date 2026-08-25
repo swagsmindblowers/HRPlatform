@@ -47,7 +47,7 @@
   padding: 7px 12px;
   font-size: 13.5px;
   font-weight: 600;
-  color: var(--color-ink-soft);
+  color: var(--color-ink);
   text-decoration: none;
   transition: background-color 0.15s ease, color 0.15s ease;
 
@@ -57,11 +57,72 @@
     color: var(--color-amber-ink);
   }
 
+  &.is-active {
+    background-color: var(--color-amber-tint);
+    color: var(--color-amber-ink);
+  }
+
   svg {
     width: 16px;
     height: 16px;
     flex: none;
   }
+}
+
+.mobile-nav {
+  background: var(--color-paper-raised);
+  border-bottom: 1px solid var(--color-steel-line);
+}
+
+.mobile-nav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--color-ink);
+  cursor: pointer;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.mobile-nav-panel {
+  border-top: 1px solid var(--color-steel-line);
+  background: var(--color-paper-raised);
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-steel-line);
+
+  &.is-active {
+    color: var(--color-amber-ink);
+    background-color: var(--color-amber-tint);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+}
+
+.mobile-nav-utility {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
 }
 
 .demo-banner {
@@ -96,25 +157,25 @@
 
           <!-- MENU -->
           <div v-if="!noMenu" class="flex items-center gap-0.5">
-            <inertia-link v-if="$page.props.auth.employee.display_welcome_message" :href="'/' + $page.props.auth.company.id + '/welcome'" data-cy="header-desktop-welcome-tab" class="nav-link">
+            <inertia-link v-if="$page.props.auth.employee.display_welcome_message" :href="'/' + $page.props.auth.company.id + '/welcome'" data-cy="header-desktop-welcome-tab" class="nav-link" :class="{ 'is-active': isActive('/welcome') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
               ><path d="M7 11V7a2 2 0 0 1 4 0v3" /><path d="M11 10.5V6a2 2 0 0 1 4 0v5" /><path d="M15 10.5V8a2 2 0 0 1 4 0v6a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-2.7L4 13a1.5 1.5 0 0 1 2.5-1.7L7 12" /></svg>
               {{ $t('app.header_welcome') }}
             </inertia-link>
-            <inertia-link :href="'/' + $page.props.auth.company.id + '/dashboard'" class="nav-link">
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/dashboard'" class="nav-link" :class="{ 'is-active': isActive('/dashboard') || isActive('/home') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
               ><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" /></svg>
               {{ $t('app.header_home') }}
             </inertia-link>
-            <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="nav-link" data-cy="header-teams-link">
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="nav-link" data-cy="header-teams-link" :class="{ 'is-active': isActive('/company') || isActive('/employees') || isActive('/teams') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
               ><rect x="4" y="4" width="7" height="16" rx="1" /><rect x="13" y="9" width="7" height="11" rx="1" /><path d="M7 8h1M7 12h1M7 16h1M16 13h1M16 16h1" /></svg>
               {{ $t('app.header_company') }}
             </inertia-link>
-            <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="nav-link">
+            <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="nav-link" :class="{ 'is-active': isActive('/recruiting') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
               ><rect x="3" y="8" width="18" height="12" rx="1.5" /><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /></svg>
@@ -126,7 +187,7 @@
               ><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.8-4.8" /></svg>
               {{ $t('app.header_find') }}
             </a>
-            <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" data-cy="header-adminland-link" class="nav-link">
+            <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" data-cy="header-adminland-link" class="nav-link" :class="{ 'is-active': isActive('/account') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
               ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
@@ -197,55 +258,70 @@
     </div>
 
     <!-- MOBILE MENU -->
-    <header class="bg-white mobile dn-ns mb3">
-      <div class="ph2 pv2 w-100 relative">
-        <div class="pv2 relative menu-toggle">
-          <label for="menu-toggle" class="dib b relative">
-            Menu
-          </label>
-          <input id="menu-toggle" type="checkbox" />
-          <ul id="mobile-menu" class="list pa0 mt4 mb0">
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                Home
-              </a>
-            </li>
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                app.main_nav_people
-              </a>
-            </li>
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                app.main_nav_journal
-              </a>
-            </li>
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                app.main_nav_find
-              </a>
-            </li>
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                app.main_nav_changelog
-              </a>
-            </li>
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                app.main_nav_settings
-              </a>
-            </li>
-            <li class="pv2 bt b--light-gray">
-              <a class="no-color b no-underline" href="">
-                app.main_nav_signout
-              </a>
-            </li>
-          </ul>
+    <header class="mobile-nav dn-ns mb3 relative">
+      <div class="ph3 pv2 w-100 flex items-center justify-between">
+        <inertia-link href="/home" class="flex items-center gap-2 no-underline">
+          <span class="brand-mark h-6 w-6 rounded-md" style="display:inline-block"></span>
+          <span class="font-display font-extrabold uppercase tracking-tight text-lg leading-none" style="color: var(--color-ink)">LaunchHR</span>
+        </inertia-link>
+
+        <div class="flex items-center gap-1">
+          <theme-toggle v-if="!noMenu" />
+          <notifications-component v-if="!noMenu" :notifications="notifications" />
+          <span v-if="!noMenu" class="mobile-nav-toggle" data-cy="mobile-nav-toggle" @click="mobileMenuOpen = !mobileMenuOpen">
+            <svg v-if="!mobileMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                 stroke-linecap="round" stroke-linejoin="round"
+            >
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                 stroke-linecap="round" stroke-linejoin="round"
+            >
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </span>
         </div>
-        <div class="absolute pa2 header-logo">
-          <a href="">
-            <img loading="lazy" src="/img/logo.svg" width="30" height="27" alt="logo" />
-          </a>
+      </div>
+
+      <div v-if="!noMenu && mobileMenuOpen" class="mobile-nav-panel">
+        <inertia-link v-if="$page.props.auth.employee.display_welcome_message" :href="'/' + $page.props.auth.company.id + '/welcome'" class="mobile-nav-link" :class="{ 'is-active': isActive('/welcome') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><path d="M7 11V7a2 2 0 0 1 4 0v3" /><path d="M11 10.5V6a2 2 0 0 1 4 0v5" /><path d="M15 10.5V8a2 2 0 0 1 4 0v6a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-2.7L4 13a1.5 1.5 0 0 1 2.5-1.7L7 12" /></svg>
+          {{ $t('app.header_welcome') }}
+        </inertia-link>
+        <inertia-link :href="'/' + $page.props.auth.company.id + '/dashboard'" class="mobile-nav-link" :class="{ 'is-active': isActive('/dashboard') || isActive('/home') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" /></svg>
+          {{ $t('app.header_home') }}
+        </inertia-link>
+        <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="mobile-nav-link" :class="{ 'is-active': isActive('/company') || isActive('/employees') || isActive('/teams') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><rect x="4" y="4" width="7" height="16" rx="1" /><rect x="13" y="9" width="7" height="11" rx="1" /><path d="M7 8h1M7 12h1M7 16h1M16 13h1M16 16h1" /></svg>
+          {{ $t('app.header_company') }}
+        </inertia-link>
+        <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="mobile-nav-link" :class="{ 'is-active': isActive('/recruiting') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><rect x="3" y="8" width="18" height="12" rx="1.5" /><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /></svg>
+          {{ $t('app.header_recruiting') }}
+        </inertia-link>
+        <a class="mobile-nav-link pointer" @click="mobileMenuOpen = false; showFindModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.8-4.8" /></svg>
+          {{ $t('app.header_find') }}
+        </a>
+        <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" class="mobile-nav-link" :class="{ 'is-active': isActive('/account') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
+          {{ $t('app.header_adminland') }}
+        </inertia-link>
+        <div class="mobile-nav-utility">
+          <user-menu :show-help-on-page="showHelpOnPage" />
         </div>
       </div>
     </header>
@@ -312,6 +388,7 @@ export default {
       submit: null,
       loadingState: '',
       modalFind: false,
+      mobileMenuOpen: false,
       showModalNotifications: true,
       dataReturnedFromSearch: false,
       processingSearch: false,
@@ -359,6 +436,10 @@ export default {
 
 
   methods: {
+    isActive(path) {
+      return this.$page.url.includes(path);
+    },
+
     updatePageTitle(title) {
       document.title = title ? `${title} | LaunchHR` : 'LaunchHR';
     },

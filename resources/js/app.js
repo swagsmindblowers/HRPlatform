@@ -9,6 +9,7 @@ import 'ant-design-vue/lib/select/style/index.css';
 import Sentry from './sentry';
 import 'v-calendar/dist/style.css';
 import VCalendar from 'v-calendar';
+import scrollReveal from './Shared/scrollReveal';
 
 const langs = require('./langs').default;
 
@@ -44,6 +45,7 @@ langs.loadLanguage(document.querySelector('html').getAttribute('lang'), true)
     .use(langs.i18n)
     .use(Antd)
     .use(VCalendar)
+    .directive('scroll-reveal', scrollReveal)
     .mount(el);
 
   InertiaProgress.init({ color: '#4B5563' });
