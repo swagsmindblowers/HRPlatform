@@ -90,4 +90,33 @@ class EmployeePerformanceViewHelper
             'surveys' => $surveysCollection,
         ];
     }
+
+    /**
+     * Get all performance reviews for the given employee.
+     *
+     * @param Employee $employee
+     * @return array
+     */
+    public static function performanceReviews(Employee $employee): array
+    {
+        return $employee->performanceReviews()
+            ->with('reviewer')
+            ->orderBy('review_date', 'desc')
+            ->get()
+            ->map(function ($review) {
+                return [
+                    'id' => $review->id,
+                    'reviewer_name' => $review->reviewer->name,
+                    'review_type' => $review->review_type,
+                    'review_date' => DateHelper::formatDate($review->review_date),
+                    'rating' => $review->rating,
+                    'strengths' => $review->strengths,
+                    'areas_for_improvement' => $review->areas_for_improvement,
+                    'notes' => $review->notes,
+                    'status' => $review->status,
+                ];
+            })
+            ->values()
+            ->all();
+    }
 }

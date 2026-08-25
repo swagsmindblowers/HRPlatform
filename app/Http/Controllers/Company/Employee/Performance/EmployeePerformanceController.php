@@ -49,6 +49,9 @@ class EmployeePerformanceController extends Controller
         // surveys
         $surveys = EmployeePerformanceViewHelper::latestRateYourManagerSurveys($employee);
 
+        // performance reviews
+        $performanceReviews = EmployeePerformanceViewHelper::performanceReviews($employee);
+
         // information about the employee, that depends on what the logged Employee can see
         $employee = EmployeeShowViewHelper::informationAboutEmployee($employee, $permissions, $loggedEmployee);
 
@@ -59,6 +62,7 @@ class EmployeePerformanceController extends Controller
             'notifications' => NotificationHelper::getNotifications(InstanceHelper::getLoggedEmployee()),
             'surveys' => $surveys,
             'oneOnOnes' => $oneOnOnes,
+            'performanceReviews' => $performanceReviews,
         ]);
     }
 }

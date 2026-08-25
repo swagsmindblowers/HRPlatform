@@ -48,6 +48,12 @@
             :menu="menu"
           />
 
+          <performance-reviews
+            :employee="employee"
+            :permissions="permissions"
+            :reviews="performanceReviews"
+          />
+
           <rate-your-manager-poll-results
             :surveys="surveys"
           />
@@ -70,6 +76,7 @@ import ProfileSidebar from '@/Pages/Employee/Partials/ProfileSidebar';
 import ProfileTabSwitcher from '@/Pages/Employee/Partials/ProfileTabSwitcher';
 import RateYourManagerPollResults from '@/Pages/Employee/Performance/Partials/RateYourManagerPollResults';
 import OneOnOne from '@/Pages/Employee/Performance/Partials/OneOnOneWithManager';
+import PerformanceReviews from '@/Pages/Employee/Performance/Partials/PerformanceReviews';
 
 export default {
   components: {
@@ -80,6 +87,7 @@ export default {
     ProfileTabSwitcher,
     RateYourManagerPollResults,
     OneOnOne,
+    PerformanceReviews,
   },
 
   props: {
@@ -110,6 +118,10 @@ export default {
     oneOnOnes: {
       type: Object,
       default: null,
+    },
+    performanceReviews: {
+      type: Array,
+      default: () => [],
     },
   },
 

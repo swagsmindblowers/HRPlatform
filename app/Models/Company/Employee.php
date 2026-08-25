@@ -152,6 +152,16 @@ class Employee extends Model
     }
 
     /**
+     * Get all the performance reviews that belong to this employee.
+     *
+     * @return HasMany
+     */
+    public function performanceReviews()
+    {
+        return $this->hasMany(PerformanceReview::class);
+    }
+
+    /**
      * Contractors don't accrue company PTO and follow a different
      * onboarding path (no I-9/right-to-work step, a contractor agreement
      * step instead).

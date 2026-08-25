@@ -272,6 +272,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
                 // one on ones
                 Route::get('oneonones', 'Company\\Employee\\Performance\\OneOnOnes\\EmployeeOneOnOneController@index')->name('employees.show.performance.oneonones.index');
                 Route::get('oneonones/{oneonone}', 'Company\\Employee\\Performance\\OneOnOnes\\EmployeeOneOnOneController@show')->name('employees.show.performance.oneonones.show');
+
+                Route::get('reviews', 'Company\\Employee\\Performance\\PerformanceReviewController@index');
+                Route::post('reviews', 'Company\\Employee\\Performance\\PerformanceReviewController@store');
+                Route::put('reviews/{review}', 'Company\\Employee\\Performance\\PerformanceReviewController@update');
             });
         });
 

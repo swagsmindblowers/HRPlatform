@@ -15,6 +15,8 @@ use App\Services\Ai\Tools\SearchEmployeesTool;
 use App\Services\Ai\Tools\GetAbsenceReportTool;
 use App\Services\Ai\Tools\CompleteOnboardingItemTool;
 use App\Services\Ai\Tools\GetOnboardingChecklistTool;
+use App\Services\Ai\Tools\ListPerformanceReviewsTool;
+use App\Services\Ai\Tools\CreatePerformanceReviewTool;
 
 /**
  * Central registry of every tool the AI assistant and the MCP server can
@@ -38,6 +40,8 @@ class AiToolRegistry
             GetMyEquityTool::class,
             GetOnboardingChecklistTool::class,
             CompleteOnboardingItemTool::class,
+            ListPerformanceReviewsTool::class,
+            CreatePerformanceReviewTool::class,
         ];
     }
 
