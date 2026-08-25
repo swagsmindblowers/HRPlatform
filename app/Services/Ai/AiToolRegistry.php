@@ -13,6 +13,8 @@ use App\Services\Ai\Tools\ListMyTimeOffTool;
 use App\Services\Ai\Tools\RequestTimeOffTool;
 use App\Services\Ai\Tools\SearchEmployeesTool;
 use App\Services\Ai\Tools\GetAbsenceReportTool;
+use App\Services\Ai\Tools\GetPolicyTemplateTool;
+use App\Services\Ai\Tools\GetComplianceStatusTool;
 use App\Services\Ai\Tools\CompleteOnboardingItemTool;
 use App\Services\Ai\Tools\GetOnboardingChecklistTool;
 use App\Services\Ai\Tools\ListPerformanceReviewsTool;
@@ -42,6 +44,8 @@ class AiToolRegistry
             CompleteOnboardingItemTool::class,
             ListPerformanceReviewsTool::class,
             CreatePerformanceReviewTool::class,
+            GetComplianceStatusTool::class,
+            GetPolicyTemplateTool::class,
         ];
     }
 

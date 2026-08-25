@@ -156,6 +156,20 @@
                     {{ $t('account.home_audit_log') }}
                   </inertia-link>
                 </div>
+                <div class="pa2 pl0 relative">
+                  <span class="mr1">
+                    ✅
+                  </span> <inertia-link :href="'/' + $page.props.auth.company.id + '/account/compliance'" data-cy="compliance-admin-link">
+                    {{ $t('compliance.title') }}
+                  </inertia-link>
+                </div>
+                <div class="pa2 pl0 relative">
+                  <span class="mr1">
+                    📄
+                  </span> <inertia-link :href="'/' + $page.props.auth.company.id + '/account/policytemplates'" data-cy="policytemplates-admin-link">
+                    {{ $t('policytemplates.title') }}
+                  </inertia-link>
+                </div>
               </div>
               <div class="ph3 relative">
                 <div v-if="paidPlanEnabled" class="pa2 pl0 relative">

@@ -545,6 +545,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         // only available to administrator role
         Route::middleware(['administrator'])->group(function () {
+            Route::get('account/compliance', 'Company\\Adminland\\Compliance\\AdminComplianceController@index');
+            Route::post('account/compliance', 'Company\\Adminland\\Compliance\\AdminComplianceController@store');
+            Route::post('account/compliance/{item}/status', 'Company\\Adminland\\Compliance\\AdminComplianceController@updateStatus');
+
+            Route::get('account/policytemplates', 'Company\\Adminland\\PolicyTemplates\\AdminPolicyTemplateController@index');
+
             Route::get('account/audit', 'Company\\Adminland\\AdminAuditController@index');
 
             Route::get('account/general', 'Company\\Adminland\\AdminGeneralController@index');
