@@ -1,0 +1,112 @@
+.btn {
+  background: var(--color-paper-raised);
+  border-radius: 9px;
+  border: 1px solid var(--color-steel-line);
+  box-shadow: 0 1px 0 rgba(29, 30, 39, 0.03);
+  color: var(--color-ink-soft);
+  cursor: pointer;
+  padding: 5px 16px;
+  text-align: center;
+  font-weight: 600;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background-color: var(--color-paper);
+    border-color: var(--color-steel);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &.add {
+    background: var(--color-amber);
+    border-color: var(--color-amber);
+    color: #fff;
+    box-shadow: var(--shadow-glow);
+
+    &:hover {
+      background-color: var(--color-amber-ink);
+      border-color: var(--color-amber-ink);
+      color: #fff;
+    }
+  }
+
+  &.destroy {
+    background: #e53e3e;
+    border-color: #c53030;
+    color: #fff;
+
+    &:hover {
+      background-color: #bd4f4f;
+      border-color: #c53030;
+      color: #fff;
+    }
+  }
+}
+
+.section-btn {
+  display: block;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid var(--color-steel-line);
+    z-index: -1;
+  }
+
+  span {
+    background-color: var(--color-paper);
+  }
+
+  a {
+    right: 0;
+    top: -8px;
+  }
+}
+
+.btn-group {
+  box-shadow: var(--shadow-glass);
+  border-radius: 11px;
+}
+
+.btn-group span,
+.btn-group a {
+  background: var(--color-paper-raised);
+  border-bottom: 0;
+  border-right: 1px solid var(--color-steel-line);
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.btn-group span,
+.btn-group a:hover {
+  background-color: var(--color-amber-tint);
+  border-bottom: 0;
+}
+
+.btn-group span,
+.btn-group a.selected {
+  background: var(--color-amber-tint);
+  color: var(--color-amber-ink);
+  font-weight: 600;
+}
+
+.btn-group span,
+.btn-group a:first-child {
+  border-bottom-left-radius: 11px;
+  border-top-left-radius: 11px;
+}
+
+.btn-group span,
+.btn-group a:last-child {
+  border-bottom-right-radius: 11px;
+  border-top-right-radius: 11px;
+  border-right: 0;
+}

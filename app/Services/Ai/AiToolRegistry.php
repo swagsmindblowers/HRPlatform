@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Services\Ai;
+
+use Exception;
+use App\Models\Company\Company;
+use App\Models\Company\Employee;
+use App\Services\Ai\Tools\AiTool;
+use App\Services\Ai\Tools\GetMyEquityTool;
+use App\Services\Ai\Tools\GetOrgChartTool;
+use App\Services\Ai\Tools\CancelTimeOffTool;
+use App\Services\Ai\Tools\ListMyTimeOffTool;
+use App\Services\Ai\Tools\RequestTimeOffTool;
+use App\Services\Ai\Tools\SearchEmployeesTool;
+use App\Services\Ai\Tools\GetAbsenceReportTool;
+use App\Services\Ai\Tools\GetPolicyTemplateTool;
+use App\Services\Ai\Tools\GetComplianceStatusTool;
+use App\Services\Ai\Tools\CompleteOnboardingItemTool;
+use App\Services\Ai\Tools\GetOnboardingChecklistTool;
+use App\Services\Ai\Tools\ListPerformanceReviewsTool;
+use App\Services\Ai\Tools\CreatePerformanceReviewTool;
+
+/**
+ * Central registry of every tool the AI assistant and the MCP server can
+ * call. Both surfaces go through this class so there is exactly one place
+ * that lists what the AI is allowed to do.
+ */
+class AiToolRegistry
+{
+    /**
+     * @return class-string<AiTool>[]
+     */
+    public static function toolClasses(): array
+    {
+        return [
+            ListMyTimeOffTool::class,
+            RequestTimeOffTool::class,
+            CancelTimeOffTool::class,
+            GetAbsenceReportTool::class,
+            SearchEmployeesTool::class,
+            GetOrgChartTool::class,
+            GetMyEquityTool::class,
+            GetOnboardingChecklistTool::class,
+            CompleteOnboardingItemTool::class,
+            ListPerformanceReviewsTool::class,
+            CreatePerformanceReviewTool::class,
+            GetComplianceStatusTool::class,
+            GetPolicyTemplateTool::class,
+        ];
+    }
+
+    /**
+     * Definitions in the OpenAI-compatible "function" tool shape used by the
+     * DeepSeek chat completions API (and most other LLM providers).
+     */
+    public static function openAiDefinitions(): array
+    {
+        return collect(self::toolClasses())->map(fn ($class) => [
+            'type' => 'function',
+            'function' => [
+                'name' => $class::name(),
+                'description' => $class::description(),
+                'parameters' => $class::schema(),
+            ],
+        ])->values()->all();
+    }
+
+    /**
+     * Definitions in a plain JSON shape for the MCP server (which doesn't
+     * use the Anthropic SDK's camelCase convention).
+     */
+    public static function jsonDefinitions(): array
+    {
+        return collect(self::toolClasses())->map(fn ($class) => [
+            'name' => $class::name(),
+            'description' => $class::description(),
+            'input_schema' => $class::schema(),
+        ])->values()->all();
+    }
+
+    /**
+     * Run a tool by name.
+     *
+     * @throws Exception if the tool doesn't exist, or the tool itself throws
+     *                    on a permission/validation failure
+     */
+    public static function dispatch(string $name, array $input, Employee $actingEmployee, Company $company): array
+    {
+        foreach (self::toolClasses() as $class) {
+            if ($class::name() === $name) {
+                /** @var AiTool $tool */
+                $tool = new $class;
+
+                return $tool->execute($input, $actingEmployee, $company);
+            }
+        }
+
+        throw new Exception("Unknown tool: {$name}");
+    }
+}

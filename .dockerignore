@@ -1,0 +1,17 @@
+.git
+node_modules
+vendor
+public/js
+public/css
+public/mix-manifest.json
+public/hot
+.env
+.env.*
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+tests
+docs
+.vscode
+.devcontainer
