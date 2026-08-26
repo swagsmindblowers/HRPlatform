@@ -169,17 +169,29 @@
               ><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" /></svg>
               {{ $t('app.header_home') }}
             </inertia-link>
-            <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="nav-link" data-cy="header-teams-link" :class="{ 'is-active': isActive('/company') || isActive('/employees') || isActive('/teams') }">
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/people'" class="nav-link" data-cy="header-people-link" :class="{ 'is-active': isActive('/people') || isActive('/company') || isActive('/employees') || isActive('/teams') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
-              ><rect x="4" y="4" width="7" height="16" rx="1" /><rect x="13" y="9" width="7" height="11" rx="1" /><path d="M7 8h1M7 12h1M7 16h1M16 13h1M16 16h1" /></svg>
-              {{ $t('app.header_company') }}
+              ><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6" /></svg>
+              {{ $t('app.header_people') }}
+            </inertia-link>
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/time-and-pay'" class="nav-link" data-cy="header-time-and-pay-link" :class="{ 'is-active': isActive('/time-and-pay') || isActive('/dashboard/timesheet') || isActive('/dashboard/manager') || isActive('/dashboard/hr') || isActive('/dashboard/expenses') }">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
+              {{ $t('app.header_time_and_pay') }}
             </inertia-link>
             <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="nav-link" :class="{ 'is-active': isActive('/recruiting') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
               ><rect x="3" y="8" width="18" height="12" rx="1.5" /><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /></svg>
               {{ $t('app.header_recruiting') }}
+            </inertia-link>
+            <inertia-link v-if="$page.props.auth.employee.permission_level <= 100" :href="'/' + $page.props.auth.company.id + '/compliance'" class="nav-link" data-cy="header-compliance-link" :class="{ 'is-active': isActive('/compliance') }">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                   stroke-linejoin="round"
+              ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
+              {{ $t('app.header_compliance') }}
             </inertia-link>
             <a data-cy="header-find-link" class="nav-link pointer" @click="showFindModal">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
@@ -190,8 +202,8 @@
             <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" data-cy="header-adminland-link" class="nav-link" :class="{ 'is-active': isActive('/account') }">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                    stroke-linejoin="round"
-              ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
-              {{ $t('app.header_adminland') }}
+              ><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" /></svg>
+              {{ $t('app.header_settings') }}
             </inertia-link>
           </div>
         </div>
@@ -296,17 +308,29 @@
           ><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" /></svg>
           {{ $t('app.header_home') }}
         </inertia-link>
-        <inertia-link :href="'/' + $page.props.auth.company.id + '/company'" class="mobile-nav-link" :class="{ 'is-active': isActive('/company') || isActive('/employees') || isActive('/teams') }" @click="mobileMenuOpen = false">
+        <inertia-link :href="'/' + $page.props.auth.company.id + '/people'" class="mobile-nav-link" :class="{ 'is-active': isActive('/people') || isActive('/company') || isActive('/employees') || isActive('/teams') }" @click="mobileMenuOpen = false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                stroke-linejoin="round"
-          ><rect x="4" y="4" width="7" height="16" rx="1" /><rect x="13" y="9" width="7" height="11" rx="1" /><path d="M7 8h1M7 12h1M7 16h1M16 13h1M16 16h1" /></svg>
-          {{ $t('app.header_company') }}
+          ><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6" /></svg>
+          {{ $t('app.header_people') }}
+        </inertia-link>
+        <inertia-link :href="'/' + $page.props.auth.company.id + '/time-and-pay'" class="mobile-nav-link" :class="{ 'is-active': isActive('/time-and-pay') || isActive('/dashboard/timesheet') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
+          {{ $t('app.header_time_and_pay') }}
         </inertia-link>
         <inertia-link v-if="$page.props.auth.employee.permission_level < 300" :href="'/' + $page.props.auth.company.id + '/recruiting/job-openings'" class="mobile-nav-link" :class="{ 'is-active': isActive('/recruiting') }" @click="mobileMenuOpen = false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                stroke-linejoin="round"
           ><rect x="3" y="8" width="18" height="12" rx="1.5" /><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /></svg>
           {{ $t('app.header_recruiting') }}
+        </inertia-link>
+        <inertia-link v-if="$page.props.auth.employee.permission_level <= 100" :href="'/' + $page.props.auth.company.id + '/compliance'" class="mobile-nav-link" :class="{ 'is-active': isActive('/compliance') }" @click="mobileMenuOpen = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+               stroke-linejoin="round"
+          ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
+          {{ $t('app.header_compliance') }}
         </inertia-link>
         <a class="mobile-nav-link pointer" @click="mobileMenuOpen = false; showFindModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
@@ -317,8 +341,8 @@
         <inertia-link v-if="$page.props.auth.company && $page.props.auth.employee.permission_level <= 200" :href="'/' + $page.props.auth.company.id + '/account'" class="mobile-nav-link" :class="{ 'is-active': isActive('/account') }" @click="mobileMenuOpen = false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                stroke-linejoin="round"
-          ><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>
-          {{ $t('app.header_adminland') }}
+          ><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" /></svg>
+          {{ $t('app.header_settings') }}
         </inertia-link>
         <div class="mobile-nav-utility">
           <user-menu :show-help-on-page="showHelpOnPage" />

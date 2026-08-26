@@ -64,6 +64,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // get the list of the positions in the company
         Route::get('positions', 'Company\\Company\\PositionController@index');
 
+        // navigation hubs - a simplified top-level IA layered over the
+        // existing feature routes below (nothing here replaces them, it
+        // just gives the most-used areas an obvious, dedicated home)
+        Route::get('people', 'Company\\Hub\\PeopleHubController@index')->name('hub.people');
+        Route::get('time-and-pay', 'Company\\Hub\\TimeAndPayHubController@index')->name('hub.time-and-pay');
+        Route::get('compliance', 'Company\\Hub\\ComplianceHubController@index')->middleware(['administrator'])->name('hub.compliance');
+
         // get the issue - an issue should have the shortest link possible
         Route::get('issues/{key}/{slug}', 'Company\\Company\\Project\\ProjectIssue\\ProjectIssuesController@show')->name('projects.issues.show');
 
