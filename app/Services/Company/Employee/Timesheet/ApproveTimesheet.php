@@ -9,6 +9,8 @@ use App\Services\BaseService;
 use App\Jobs\LogEmployeeAudit;
 use App\Models\Company\Employee;
 use App\Models\Company\Timesheet;
+use App\Models\Company\Integration;
+use App\Jobs\SyncApprovedTimesheetToDeel;
 
 class ApproveTimesheet extends BaseService
 {
@@ -46,6 +48,7 @@ class ApproveTimesheet extends BaseService
         $this->validate();
         $this->accept();
         $this->log();
+        $this->syncToPayrollSoftware();
 
         return $this->timesheet;
     }
@@ -74,6 +77,23 @@ class ApproveTimesheet extends BaseService
         $this->timesheet->approver_id = $this->author->id;
         $this->timesheet->approver_name = $this->author->name;
         $this->timesheet->save();
+    }
+
+    /**
+     * Push the now-approved timesheet to Deel for contractor payroll, if
+     * the employee is a contractor and the company has Deel connected.
+     * No-op otherwise.
+     */
+    private function syncToPayrollSoftware(): void
+    {
+        $hasDeelConnection = Integration::where('company_id', $this->data['company_id'])
+            ->where('provider', Integration::PROVIDER_DEEL)
+            ->where('status', Integration::STATUS_CONNECTED)
+            ->exists();
+
+        if ($hasDeelConnection && $this->employee->isContractor()) {
+            SyncApprovedTimesheetToDeel::dispatch($this->timesheet)->onQueue('low');
+        }
     }
 
     private function log(): void

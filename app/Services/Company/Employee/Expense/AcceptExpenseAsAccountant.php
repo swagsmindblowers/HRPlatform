@@ -10,6 +10,8 @@ use App\Jobs\LogAccountAudit;
 use App\Services\BaseService;
 use App\Jobs\LogEmployeeAudit;
 use App\Models\Company\Expense;
+use App\Models\Company\Integration;
+use App\Jobs\SyncApprovedExpenseToXero;
 use App\Exceptions\NotEnoughPermissionException;
 
 class AcceptExpenseAsAccountant extends BaseService
@@ -49,6 +51,8 @@ class AcceptExpenseAsAccountant extends BaseService
         $this->notifyEmployee();
 
         $this->log();
+
+        $this->syncToAccountingSoftware();
 
         return $this->expense;
     }
@@ -105,6 +109,22 @@ class AcceptExpenseAsAccountant extends BaseService
                 'title' => $this->expense->title,
             ]),
         ])->onQueue('low');
+    }
+
+    /**
+     * Push the now-accepted expense to the company's connected accounting
+     * software, if any. No-op if nothing is connected.
+     */
+    private function syncToAccountingSoftware(): void
+    {
+        $hasXeroConnection = Integration::where('company_id', $this->data['company_id'])
+            ->where('provider', Integration::PROVIDER_XERO)
+            ->where('status', Integration::STATUS_CONNECTED)
+            ->exists();
+
+        if ($hasXeroConnection) {
+            SyncApprovedExpenseToXero::dispatch($this->expense)->onQueue('low');
+        }
     }
 
     /**

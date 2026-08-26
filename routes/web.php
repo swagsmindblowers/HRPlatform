@@ -42,6 +42,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('user/api-tokens', 'ApiTokenController@store');
     Route::delete('user/api-tokens/{token}', 'ApiTokenController@destroy');
 
+    // OAuth callback for payroll/accounting connectors - outside the
+    // {company} route group since the provider redirects back here before
+    // we've resolved a company from the URL; company/author context comes
+    // from the session state stored at connect() time instead.
+    Route::get('integrations/{provider}/callback', 'Integrations\\IntegrationsController@callback');
+
     Route::get('company/create', 'Company\\CompanyController@create');
     Route::post('company/store', 'Company\\CompanyController@store')->name('company.store');
     Route::get('company/join', 'Company\\CompanyController@join');
@@ -549,6 +555,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         // only available to administrator role
         Route::middleware(['administrator'])->group(function () {
+            Route::get('integrations', 'Integrations\\IntegrationsController@index');
+            Route::get('integrations/{provider}/connect', 'Integrations\\IntegrationsController@connect');
+            Route::post('integrations/{provider}/disconnect', 'Integrations\\IntegrationsController@disconnect');
+
             Route::get('account/compliance', 'Company\\Adminland\\Compliance\\AdminComplianceController@index');
             Route::post('account/compliance', 'Company\\Adminland\\Compliance\\AdminComplianceController@store');
             Route::post('account/compliance/{item}/status', 'Company\\Adminland\\Compliance\\AdminComplianceController@updateStatus');

@@ -8,6 +8,8 @@ use App\Services\BaseService;
 use App\Jobs\LogEmployeeAudit;
 use Illuminate\Validation\Rule;
 use App\Models\Company\Employee;
+use App\Models\Company\Integration;
+use App\Jobs\SyncContractorToDeelJob;
 
 class SetEmploymentType extends BaseService
 {
@@ -74,6 +76,17 @@ class SetEmploymentType extends BaseService
                 'employment_type' => $employee->employment_type,
             ]),
         ])->onQueue('low');
+
+        if ($employee->isContractor()) {
+            $hasDeelConnection = Integration::where('company_id', $data['company_id'])
+                ->where('provider', Integration::PROVIDER_DEEL)
+                ->where('status', Integration::STATUS_CONNECTED)
+                ->exists();
+
+            if ($hasDeelConnection) {
+                SyncContractorToDeelJob::dispatch($employee)->onQueue('low');
+            }
+        }
 
         return $employee;
     }

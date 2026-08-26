@@ -15,6 +15,7 @@ use App\Services\Ai\Tools\SearchEmployeesTool;
 use App\Services\Ai\Tools\GetAbsenceReportTool;
 use App\Services\Ai\Tools\GetPolicyTemplateTool;
 use App\Services\Ai\Tools\GetComplianceStatusTool;
+use App\Services\Ai\Tools\GetIntegrationStatusTool;
 use App\Services\Ai\Tools\CompleteOnboardingItemTool;
 use App\Services\Ai\Tools\GetOnboardingChecklistTool;
 use App\Services\Ai\Tools\ListPerformanceReviewsTool;
@@ -46,6 +47,7 @@ class AiToolRegistry
             CreatePerformanceReviewTool::class,
             GetComplianceStatusTool::class,
             GetPolicyTemplateTool::class,
+            GetIntegrationStatusTool::class,
         ];
     }
 

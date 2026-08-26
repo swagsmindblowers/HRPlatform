@@ -106,4 +106,16 @@ return [
         'model' => env('DEEPSEEK_MODEL', 'deepseek-chat'),
     ],
 
+    'xero' => [
+        'client_id' => env('XERO_CLIENT_ID'),
+        'client_secret' => env('XERO_CLIENT_SECRET'),
+        'redirect' => env('XERO_REDIRECT_URI', '/integrations/xero/callback'),
+    ],
+
+    'deel' => [
+        'client_id' => env('DEEL_CLIENT_ID'),
+        'client_secret' => env('DEEL_CLIENT_SECRET'),
+        'redirect' => env('DEEL_REDIRECT_URI', '/integrations/deel/callback'),
+    ],
+
 ];
