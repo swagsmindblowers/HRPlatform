@@ -50,13 +50,13 @@
                   {{ $t('account.home_manage_teams') }}
                 </inertia-link>
               </div>
-              <!-- <div class="pa2 pl0 relative">
+              <div class="pa2 pl0 relative">
                 <span class="mr1">
                   🏄‍♂️
                 </span> <inertia-link :href="'/' + $page.props.auth.company.id + '/account/flows'" data-cy="flow-admin-link">
                   {{ $t('account.home_manage_flows') }}
                 </inertia-link>
-              </div> -->
+              </div>
               <div class="pa2 pl0 relative">
                 <span class="mr1">
                   ⛑
@@ -87,11 +87,13 @@
               </div>
             </div>
             <div class="ph3">
-              <!-- <div class="pa2 pl0 relative">
-                <span class="mr1">🌴</span> <inertia-link :href="'/' + $page.props.auth.company.id + '/account/ptopolicies'" data-cy="pto-policies-admin-link">
+              <div class="pa2 pl0 relative">
+                <span class="mr1">
+                  🌴
+                </span> <inertia-link :href="'/' + $page.props.auth.company.id + '/account/ptopolicies'" data-cy="pto-policies-admin-link">
                   {{ $t('account.home_manage_pto') }}
                 </inertia-link>
-              </div> -->
+              </div>
               <div class="pa2 pl0 relative">
                 <span class="mr1">
                   🌈
