@@ -88,7 +88,7 @@
             {{ $t('hub.time_and_pay_mine') }}
           </div>
           <div class="hub-grid">
-            <inertia-link :href="'/' + $page.props.auth.company.id + '/employees/' + employee.id" class="hub-card">
+            <inertia-link :href="'/' + $page.props.auth.company.id + '/employees/' + employee.id + '/administration'" class="hub-card highlight" data-cy="time-off-hub-card">
               <span class="hub-card-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                      stroke-linejoin="round"

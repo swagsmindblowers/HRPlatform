@@ -59,9 +59,9 @@
             :softwares="softwares"
           />
 
-          <!-- <holidays
+          <holidays
             :employee="employee"
-          /> -->
+          />
         </div>
       </div>
     </div>
@@ -78,6 +78,7 @@ import Expenses from '@/Pages/Employee/Administration/Partials/Expenses';
 import Timesheets from '@/Pages/Employee/Administration/Partials/Timesheets';
 import Hardware from '@/Pages/Employee/Administration/Partials/Hardware';
 import Softwares from '@/Pages/Employee/Administration/Partials/Software';
+import Holidays from '@/Pages/Employee/Administration/Partials/Holidays';
 
 export default {
   components: {
@@ -90,6 +91,7 @@ export default {
     Timesheets,
     Hardware,
     Softwares,
+    Holidays,
   },
 
   props: {
