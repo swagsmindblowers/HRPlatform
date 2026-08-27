@@ -314,7 +314,7 @@
           ><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.5-6 8-6s8 2 8 6" /></svg>
           {{ $t('app.header_people') }}
         </inertia-link>
-        <inertia-link :href="'/' + $page.props.auth.company.id + '/time-and-pay'" class="mobile-nav-link" :class="{ 'is-active': isActive('/time-and-pay') || isActive('/dashboard/timesheet') }" @click="mobileMenuOpen = false">
+        <inertia-link :href="'/' + $page.props.auth.company.id + '/time-and-pay'" class="mobile-nav-link" :class="{ 'is-active': isActive('/time-and-pay') || isActive('/dashboard/timesheet') || isActive('/dashboard/manager') || isActive('/dashboard/hr') || isActive('/dashboard/expenses') }" @click="mobileMenuOpen = false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
                stroke-linejoin="round"
           ><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
