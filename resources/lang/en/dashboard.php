@@ -69,6 +69,7 @@ return [
     'expense_create_help_title' => 'Help',
     'expense_create_help_description' => 'The expense’s amount should be without spaces or commas, like `102.23`. Also, please use the currency that appears on the receipt.',
     'expense_submitted' => 'The expense has been submitted.',
+    'expense_submitting' => 'Submitting…',
     'expense_show_description' => 'Have you made an expense on behalf of your company? Log it to be reimbursed promptly on the next paycheck.',
     'expense_show_status_accounting_approval' => 'Waiting for approval',
     'expense_show_status_manager_approval' => 'Waiting for manager',

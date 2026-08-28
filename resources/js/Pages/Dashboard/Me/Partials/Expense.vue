@@ -151,10 +151,11 @@ k<style lang="scss" scoped>
       <!-- LIST OF IN PROGRESS EXPENSES -->
       <div v-if="localExpenses.length > 0">
         <ul class="list pl0 mb0" data-cy="expenses-list">
-          <li v-for="expense in localExpenses" :key="expense.id" :data-cy="'expense-item-' + expense.id" class="expense-item dt-ns br bl bb bb-gray bb-gray-hover pa3 w-100">
+          <li v-for="expense in localExpenses" :key="expense.id" :data-cy="'expense-item-' + expense.id" class="expense-item dt-ns br bl bb bb-gray bb-gray-hover pa3 w-100" :class="{ 'o-60': expense._optimistic }">
             <div class="dt-row-ns">
               <div class="dtc-ns db mb3 mb0-ns">
-                <inertia-link :href="expense.url" :data-cy="'expense-cta-' + expense.id" class="dib mb2">{{ expense.title }}</inertia-link>
+                <inertia-link v-if="expense.url" :href="expense.url" :data-cy="'expense-cta-' + expense.id" class="dib mb2">{{ expense.title }}</inertia-link>
+                <span v-else class="dib mb2">{{ expense.title }}</span>
                 <ul class="f7 fw3 grey list pl0">
                   <li class="mr2 di">{{ expense.expensed_at }}</li>
                   <li v-if="expense.category" class="di">{{ expense.category }}</li>
@@ -167,7 +168,8 @@ k<style lang="scss" scoped>
                 <div v-if="expense.converted_amount" class="db f6 fw4 mt2 gray">{{ expense.converted_amount }}</div>
               </div>
               <div class="expense-status tc-ns dtc-ns v-mid db mb3 mb0-ns">
-                <span class="br3 expense-badge-waiting f7 fw5 ph2 pv2 di" :data-cy="'expense-' + expense.id + '-status-' + expense.status">{{ $t('dashboard.expense_show_status_' + expense.status) }}</span>
+                <span v-if="expense._optimistic" class="br3 expense-badge-waiting f7 fw5 ph2 pv2 di">{{ $t('dashboard.expense_submitting') }}</span>
+                <span v-else class="br3 expense-badge-waiting f7 fw5 ph2 pv2 di" :data-cy="'expense-' + expense.id + '-status-' + expense.status">{{ $t('dashboard.expense_show_status_' + expense.status) }}</span>
               </div>
             </div>
           </li>
@@ -271,15 +273,38 @@ export default {
     submit() {
       this.loadingState = 'loading';
 
+      // optimistic: show the expense immediately instead of waiting on the
+      // response, so the user isn't staring at a frozen form while it saves
+      const tempId = 'temp-' + Date.now();
+      const category = (this.categories || []).find(option => option.id === this.form.category);
+      this.localExpenses.unshift({
+        id: tempId,
+        title: this.form.title,
+        expensed_at: this.$t('dashboard.expense_submitting'),
+        category: category ? category.name : null,
+        amount: this.form.amount,
+        converted_amount: null,
+        url: null,
+        _optimistic: true,
+      });
+      this.hideAddMode();
+
       axios.post(this.route('dashboard.expense.store', this.$page.props.auth.company.id), this.form)
         .then(response => {
           this.loadingState = null;
-          this.localExpenses.unshift(response.data.data);
-          this.hideAddMode();
+          const index = this.localExpenses.findIndex(expense => expense.id === tempId);
+          if (index !== -1) {
+            this.localExpenses.splice(index, 1, response.data.data);
+          }
           this.flash(this.$t('dashboard.expense_submitted'), 'success');
         })
         .catch(error => {
           this.loadingState = null;
+          const index = this.localExpenses.findIndex(expense => expense.id === tempId);
+          if (index !== -1) {
+            this.localExpenses.splice(index, 1);
+          }
+          this.displayAddMode();
           this.form.errors = error.response.data;
         });
     },
