@@ -8,6 +8,8 @@ use App\Helpers\ImageHelper;
 use App\Models\Company\Company;
 use App\Models\Company\Employee;
 use App\Models\Company\Timesheet;
+use App\Models\Company\EmployeeOnboardingChecklist;
+use App\Models\Company\EmployeeOnboardingChecklistItem;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Services\Company\Employee\Manager\AssignManager;
 use App\Http\ViewHelpers\Dashboard\DashboardHRViewHelper;
@@ -106,6 +108,47 @@ class DashboardHRViewHelperTest extends TestCase
             ],
             $array
         );
+    }
+
+    /** @test */
+    public function it_gets_a_collection_of_overdue_and_upcoming_onboarding_items(): void
+    {
+        Carbon::setTestNow(Carbon::create(2018, 1, 1));
+
+        $michael = $this->createAdministrator();
+
+        $checklist = EmployeeOnboardingChecklist::create([
+            'employee_id' => $michael->id,
+            'started_at' => '2017-12-20',
+        ]);
+
+        $overdueItem = EmployeeOnboardingChecklistItem::create([
+            'employee_onboarding_checklist_id' => $checklist->id,
+            'title' => 'Sign contract',
+            'type' => 'task',
+            'is_legally_mandated' => true,
+            'due_date' => '2017-12-31',
+        ]);
+
+        $upcomingItem = EmployeeOnboardingChecklistItem::create([
+            'employee_onboarding_checklist_id' => $checklist->id,
+            'title' => 'Complete tax forms',
+            'type' => 'compliance_deadline',
+            'is_legally_mandated' => true,
+            'due_date' => '2018-01-10',
+        ]);
+
+        $array = DashboardHRViewHelper::onboarding($michael->company);
+
+        $this->assertEquals(1, $array['overdue']->count());
+        $this->assertEquals($overdueItem->id, $array['overdue']->first()['id']);
+        $this->assertEquals(
+            env('APP_URL').'/'.$michael->company_id.'/employees/'.$michael->id,
+            $array['overdue']->first()['url']
+        );
+
+        $this->assertEquals(1, $array['upcoming']->count());
+        $this->assertEquals($upcomingItem->id, $array['upcoming']->first()['id']);
     }
 
     /** @test */

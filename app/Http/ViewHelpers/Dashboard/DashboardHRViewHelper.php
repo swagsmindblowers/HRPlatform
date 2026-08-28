@@ -186,7 +186,7 @@ class DashboardHRViewHelper
             ->orderBy('due_date')
             ->get();
 
-        $format = function ($item) {
+        $format = function ($item) use ($company) {
             $employee = $item->checklist->employee;
 
             return [
