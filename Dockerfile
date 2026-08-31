@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+COPY docker/php-limits.ini /usr/local/etc/php/conf.d/php-limits.ini
+
 WORKDIR /var/www/html
 
 COPY . .

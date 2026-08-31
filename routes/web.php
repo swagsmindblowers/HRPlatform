@@ -59,7 +59,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('hide', 'WelcomeController@hide');
 
         // AI assistant
-        Route::post('ai/chat', 'Company\\Ai\\AiAssistantController@chat')->name('ai.chat');
+        Route::post('ai/chat', 'Company\\Ai\\AiAssistantController@chat')->middleware('throttle:ai-chat')->name('ai.chat');
 
         Route::get('notifications', 'User\\Notification\\NotificationController@index');
         Route::post('notifications/read', 'User\\Notification\\MarkNotificationAsReadController@store');
