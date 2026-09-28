@@ -7,7 +7,7 @@ return [
 
     'hero_eyebrow' => 'HR for founders, not enterprises',
     'hero_title' => 'Run HR like a founder, not a bureaucracy.',
-    'hero_subtitle' => 'LaunchHR is the HR platform built for early-stage teams — time off, onboarding, compliance, org structure, and performance, with an AI assistant that actually does the work for you.',
+    'hero_subtitle' => 'BetterOff HR is the HR platform built for early-stage teams — time off, onboarding, compliance, org structure, and performance, with an AI assistant that actually does the work for you.',
     'hero_cta_primary' => 'Get started free',
     'hero_cta_secondary' => 'Log in',
 
@@ -33,9 +33,9 @@ return [
     'feature_compliance_body' => 'Track company-wide obligations — insurance, tax, pension, sponsor licence — and pull from a starter library of UK HR policy templates to move fast without starting from a blank page.',
 
     'cta_title' => 'Built for the next hire you make.',
-    'cta_subtitle' => 'Set up LaunchHR before you need it, not after something falls through the cracks.',
+    'cta_subtitle' => 'Set up BetterOff HR before you need it, not after something falls through the cracks.',
     'cta_button' => 'Get started free',
 
-    'footer_tagline' => 'LaunchHR — HR for founders.',
+    'footer_tagline' => 'BetterOff HR — HR for founders.',
 
 ];

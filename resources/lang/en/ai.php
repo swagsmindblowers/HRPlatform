@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'chat_title' => 'Ask LaunchHR',
+    'chat_title' => 'Ask BetterOff HR',
     'chat_placeholder' => 'Ask about your time off, or anything else...',
     'chat_send' => 'Send',
     'chat_empty' => 'Ask me to check your time off balance, log a day off, or (for HR/admins) pull the absence report.',
@@ -9,7 +9,7 @@ return [
     'chat_not_configured' => 'The AI assistant isn\'t set up yet.',
 
     'tokens_title' => 'API tokens',
-    'tokens_description' => 'Personal access tokens let you connect LaunchHR to Claude Desktop, Claude Code, or any other MCP client, so you can manage your time off from outside the app.',
+    'tokens_description' => 'Personal access tokens let you connect BetterOff HR to Claude Desktop, Claude Code, or any other MCP client, so you can manage your time off from outside the app.',
     'tokens_name_label' => 'Token name',
     'tokens_name_placeholder' => 'e.g. Claude Desktop',
     'tokens_create' => 'Create token',
