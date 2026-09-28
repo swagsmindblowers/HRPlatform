@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ \App::getLocale() }}" style="background:#0b0c10">
+<html lang="{{ \App::getLocale() }}" style="background:#f4f5f2">
 
 <head>
   <meta charset="utf-8">
@@ -8,9 +8,9 @@
   <base href="{{ url('/') }}/" />
   <script>
     (function () {
-      var theme = localStorage.getItem('launchhr_theme');
-      if (theme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
+      var theme = localStorage.getItem('betteroff_theme');
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
       }
     })();
   </script>
@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="{{ asset(mix('css/tailwind.css')) }}">
   <script id="app-js" src="{{ asset(mix('js/app.js')) }}" defer></script>
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/favicon.png') }}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/apple-touch-icon.png') }}" />
   <title>@yield('title', config('app.name'))</title>
 
   @if (config('app.sentry.enabled'))

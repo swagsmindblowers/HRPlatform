@@ -41,12 +41,12 @@
 export default {
   data() {
     return {
-      isLight: false,
+      isLight: true,
     };
   },
 
   created() {
-    this.isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    this.isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
   },
 
   methods: {
@@ -54,11 +54,11 @@ export default {
       this.isLight = !this.isLight;
 
       if (this.isLight) {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('launchhr_theme', 'light');
-      } else {
         document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('launchhr_theme', 'dark');
+        localStorage.setItem('betteroff_theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('betteroff_theme', 'dark');
       }
     },
   },
