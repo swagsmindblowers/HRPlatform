@@ -48,44 +48,48 @@ class BetterOffRatesSeeder extends Seeder
         ];
 
         foreach ($rows as $row) {
-            RateVersion::updateOrCreate(
-                ['key' => $row['key'], 'effective_from' => '2024-04-06'],
-                array_merge(['effective_from' => '2024-04-06', 'effective_to' => null], $row)
-            );
+            $this->upsertRate($row['key'], '2024-04-06', array_merge(['effective_to' => null], $row));
         }
 
         // A historical Immigration Skills Charge rate for the small-employer band,
         // to exercise the "as-at date before a rate change returns the earlier rate" case.
-        RateVersion::updateOrCreate(
-            ['key' => 'uk.sponsorship.skills_charge.small_employer_per_year', 'effective_from' => '2020-01-01'],
-            [
-                'value' => 364,
-                'unit' => 'gbp_per_year',
-                'effective_from' => '2020-01-01',
-                'effective_to' => '2023-03-31',
-                'source_url' => 'https://www.gov.uk/guidance/immigration-skills-charge-employer-guidance',
-                'notes' => 'Historical rate, superseded 2023-04-01.',
-            ]
-        );
-        RateVersion::updateOrCreate(
-            ['key' => 'uk.sponsorship.skills_charge.small_employer_per_year', 'effective_from' => '2023-04-01'],
-            [
-                'value' => 364,
-                'unit' => 'gbp_per_year',
-                'effective_from' => '2023-04-01',
-                'effective_to' => null,
-                'source_url' => 'https://www.gov.uk/guidance/immigration-skills-charge-employer-guidance',
-            ]
-        );
-        RateVersion::updateOrCreate(
-            ['key' => 'uk.sponsorship.skills_charge.large_employer_per_year', 'effective_from' => '2024-04-06'],
-            [
-                'value' => 1000,
-                'unit' => 'gbp_per_year',
-                'effective_from' => '2024-04-06',
-                'effective_to' => null,
-                'source_url' => 'https://www.gov.uk/guidance/immigration-skills-charge-employer-guidance',
-            ]
-        );
+        $this->upsertRate('uk.sponsorship.skills_charge.small_employer_per_year', '2020-01-01', [
+            'value' => 364,
+            'unit' => 'gbp_per_year',
+            'effective_to' => '2023-03-31',
+            'source_url' => 'https://www.gov.uk/guidance/immigration-skills-charge-employer-guidance',
+            'notes' => 'Historical rate, superseded 2023-04-01.',
+        ]);
+        $this->upsertRate('uk.sponsorship.skills_charge.small_employer_per_year', '2023-04-01', [
+            'value' => 364,
+            'unit' => 'gbp_per_year',
+            'effective_to' => null,
+            'source_url' => 'https://www.gov.uk/guidance/immigration-skills-charge-employer-guidance',
+        ]);
+        $this->upsertRate('uk.sponsorship.skills_charge.large_employer_per_year', '2024-04-06', [
+            'value' => 1000,
+            'unit' => 'gbp_per_year',
+            'effective_to' => null,
+            'source_url' => 'https://www.gov.uk/guidance/immigration-skills-charge-employer-guidance',
+        ]);
+    }
+
+    /**
+     * updateOrCreate() can't be used directly here: `effective_from` is cast to
+     * `date`, which Laravel serialises to a full datetime string in the DB, so a
+     * bare 'Y-m-d' search value never matches an existing row and every re-seed
+     * would insert a duplicate. whereDate() compares on the date part only.
+     */
+    private function upsertRate(string $key, string $effectiveFrom, array $attributes): void
+    {
+        $row = array_merge(['key' => $key, 'effective_from' => $effectiveFrom], $attributes);
+
+        $existing = RateVersion::where('key', $key)->whereDate('effective_from', $effectiveFrom)->first();
+
+        if ($existing) {
+            $existing->update($row);
+        } else {
+            RateVersion::create($row);
+        }
     }
 }

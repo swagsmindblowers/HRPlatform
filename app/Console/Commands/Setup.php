@@ -57,6 +57,10 @@ class Setup extends Command
 
             $this->artisan('✓ Performing migrations', 'migrate', ['--force']);
 
+            // Idempotent (RateVersion rows are upserted by key+effective_from), so safe to
+            // re-run on every deploy rather than requiring a one-off manual seed step.
+            $this->artisan('✓ Seeding BetterOff rates', 'db:seed', ['--class' => 'Database\\Seeders\\BetterOffRatesSeeder', '--force']);
+
             // Cache config
             if ($this->getLaravel()->environment() == 'production'
                 && (config('cache.default') != 'database' || Schema::hasTable(config('cache.stores.database.table')))) {
