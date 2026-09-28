@@ -31,6 +31,9 @@ class Company extends Model
         'work_from_home_enabled',
         'founded_at',
         'code_to_join_company',
+        'betteroff_has_sponsor_licence',
+        'betteroff_employer_size_class',
+        'betteroff_default_employer_visa_share_percent',
     ];
 
     /**
@@ -42,6 +45,7 @@ class Company extends Model
         'has_dummy_data' => 'boolean',
         'e_coffee_enabled' => 'boolean',
         'work_from_home_enabled' => 'boolean',
+        'betteroff_has_sponsor_licence' => 'boolean',
     ];
 
     /**
@@ -399,5 +403,35 @@ class Company extends Model
         }
 
         return $managersCollection->unique('id');
+    }
+
+    /**
+     * Get all compliance items tracked for the company.
+     *
+     * @return HasMany
+     */
+    public function complianceItems()
+    {
+        return $this->hasMany(CompanyComplianceItem::class);
+    }
+
+    /**
+     * Get all BetterOff.FYI hiring-cost scenarios saved for the company.
+     *
+     * @return HasMany
+     */
+    public function betterOffScenarios()
+    {
+        return $this->hasMany(\App\Models\BetterOff\Scenario::class);
+    }
+
+    /**
+     * Get all BetterOff.FYI sponsored-worker records for the company.
+     *
+     * @return HasMany
+     */
+    public function betterOffSponsoredWorkers()
+    {
+        return $this->hasMany(\App\Models\BetterOff\SponsoredWorker::class);
     }
 }

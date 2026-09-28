@@ -182,6 +182,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
+        App\Providers\BetterOffServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         Vluzrmos\LanguageDetector\Providers\LanguageDetectorServiceProvider::class,
