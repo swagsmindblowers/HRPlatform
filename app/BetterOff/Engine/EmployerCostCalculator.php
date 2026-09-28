@@ -30,13 +30,16 @@ class EmployerCostCalculator
 
         if ($input->hireType === EmployerHireInput::HIRE_TYPE_SPONSORED && $input->socCode !== null) {
             $goingRate = $this->rates->asOf('uk.skilled_worker.going_rate.'.$input->socCode, $input->asOfDate);
-            if ($input->annualSalary < $goingRate->value) {
+            [$effectiveThreshold, $discountLabel, $discountKey] = $this->applyGoingRateDiscount($input, $goingRate->value);
+
+            if ($input->annualSalary < $effectiveThreshold) {
                 $warnings[] = sprintf(
-                    'Salary is below the indicative going rate for SOC code %s (%.2f GBP as of %s). '.
+                    'Salary is below the indicative going rate for SOC code %s (%.2f GBP as of %s%s). '.
                     'This is a cost indicator only, not an eligibility assessment — it is never a pass or fail result.',
                     $input->socCode,
-                    $goingRate->value,
-                    $input->asOfDate->format('Y-m-d')
+                    $effectiveThreshold,
+                    $input->asOfDate->format('Y-m-d'),
+                    $discountLabel ? ", after the {$discountLabel}" : ''
                 );
             }
         }
@@ -115,6 +118,49 @@ class EmployerCostCalculator
             'sponsored' => $sponsored,
             'difference' => $sponsored->totalCost - $uk->totalCost,
         ];
+    }
+
+    /**
+     * The going-rate threshold a salary is checked against is reduced for a
+     * handful of cases (new entrant, PhD-relevant role, PhD in a STEM subject,
+     * role on the Immigration Salary List). Real Home Office rules let some of
+     * these combine in specific ways; this applies only the single largest
+     * discount rather than stacking them, as a deliberately simplified,
+     * clearly-labelled indicator rather than an attempt at exact eligibility
+     * rules. Discount percentages come from the rates table, never hardcoded.
+     *
+     * @return array{0: float, 1: ?string, 2: ?string} [effective threshold, human label, rate key]
+     */
+    private function applyGoingRateDiscount(EmployerHireInput $input, float $goingRate): array
+    {
+        $candidates = [];
+
+        if ($input->hasStemPhd) {
+            $candidates[] = ['uk.skilled_worker.discount.phd_stem', 'PhD (STEM subject) discount'];
+        }
+        if ($input->hasRelevantPhd) {
+            $candidates[] = ['uk.skilled_worker.discount.phd_relevant', 'PhD (relevant subject) discount'];
+        }
+        if ($input->isOnImmigrationSalaryList) {
+            $candidates[] = ['uk.skilled_worker.discount.immigration_salary_list', 'Immigration Salary List discount'];
+        }
+        if ($input->isNewEntrant) {
+            $candidates[] = ['uk.skilled_worker.discount.new_entrant', 'new entrant discount'];
+        }
+
+        if (empty($candidates)) {
+            return [$goingRate, null, null];
+        }
+
+        $best = null;
+        foreach ($candidates as [$rateKey, $label]) {
+            $rate = $this->rates->asOf($rateKey, $input->asOfDate);
+            if ($best === null || $rate->value > $best['value']) {
+                $best = ['value' => $rate->value, 'label' => $label, 'key' => $rate->key];
+            }
+        }
+
+        return [$goingRate * (1 - $best['value']), $best['label'], $best['key']];
     }
 
     private function employerNiLineItem(EmployerHireInput $input): LineItem

@@ -180,6 +180,149 @@
   &:active { transform: scale(0.96); }
 }
 
+/* ---------- estimate ---------- */
+.estimate-band {
+  padding: 0 24px 80px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.estimate-card {
+  background: color-mix(in srgb, var(--color-paper-raised) 92%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-steel-line);
+  border-radius: 20px;
+  box-shadow: var(--shadow-glass);
+  padding: 32px;
+}
+
+.estimate-eyebrow {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-amber-ink);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.estimate-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  margin-bottom: 24px;
+}
+
+.estimate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.estimate-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  text-align: left;
+
+  input, select {
+    font: inherit;
+    font-weight: 500;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    border: 1px solid var(--color-steel-line);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+}
+
+.estimate-submit {
+  border: none;
+  cursor: pointer;
+  width: 100%;
+
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
+.estimate-result {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-steel-line);
+  text-align: left;
+}
+
+.estimate-result-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 15px;
+  margin-bottom: 8px;
+
+  strong { font-size: 22px; font-family: var(--font-display); }
+}
+
+.estimate-result-disclaimer {
+  font-size: 12.5px;
+  color: var(--color-ink-soft);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.estimate-breakdown-link {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-amber-ink);
+  text-decoration: none;
+}
+
+/* ---------- how it works ---------- */
+.how-it-works {
+  padding: 0 24px 100px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.how-it-works-step {
+  text-align: left;
+}
+
+.how-it-works-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-amber-tint);
+  color: var(--color-amber-ink);
+  font-weight: 800;
+  font-family: var(--font-display);
+  margin-bottom: 14px;
+}
+
+.how-it-works-title-text {
+  font-weight: 700;
+  font-size: 15.5px;
+  margin-bottom: 8px;
+}
+
+.how-it-works-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-ink-soft);
+}
+
 /* ---------- features ---------- */
 .features {
   padding: 40px 24px 100px;
@@ -329,6 +472,7 @@
         </span>
       </div>
       <div class="flex items-center gap-3">
+        <a href="/betteroff" class="nav-login">{{ $t('landing.nav_calculator') }}</a>
         <a href="/login" class="nav-login">{{ $t('landing.nav_login') }}</a>
         <a href="/login" class="nav-cta">{{ $t('landing.nav_cta') }}</a>
       </div>
@@ -345,8 +489,60 @@
         </h1>
         <p class="hero-subtitle">{{ $t('landing.hero_subtitle') }}</p>
         <div class="hero-actions">
-          <a href="/login" class="btn-primary">{{ $t('landing.hero_cta_primary') }}</a>
+          <a href="/betteroff" class="btn-primary">{{ $t('landing.hero_cta_primary') }}</a>
           <a href="/login" class="btn-secondary">{{ $t('landing.hero_cta_secondary') }}</a>
+        </div>
+      </div>
+    </section>
+
+    <section v-scroll-reveal class="estimate-band">
+      <div class="estimate-card">
+        <span class="estimate-eyebrow">{{ $t('landing.estimate_eyebrow') }}</span>
+        <h2 class="estimate-title">{{ $t('landing.estimate_title') }}</h2>
+
+        <div class="estimate-grid">
+          <label class="estimate-field">
+            {{ $t('landing.estimate_role_label') }}
+            <input v-model="estimate.role" type="text" :placeholder="$t('landing.estimate_role_placeholder')" />
+          </label>
+          <label class="estimate-field">
+            {{ $t('landing.estimate_salary_label') }}
+            <input v-model.number="estimate.salary" type="number" min="0" step="1000" />
+          </label>
+          <label class="estimate-field">
+            {{ $t('landing.estimate_route_label') }}
+            <select v-model="estimate.hireType">
+              <option value="uk">{{ $t('landing.estimate_route_uk') }}</option>
+              <option value="sponsored">{{ $t('landing.estimate_route_sponsored') }}</option>
+            </select>
+          </label>
+        </div>
+
+        <button class="btn-primary estimate-submit" :disabled="estimateLoading" @click="runEstimate">
+          {{ $t('landing.estimate_submit') }}
+        </button>
+
+        <div v-if="estimateResult" class="estimate-result">
+          <div class="estimate-result-total">
+            <span>{{ $t('landing.estimate_result_total') }}</span>
+            <strong>£{{ estimateResult.total_cost.toLocaleString() }}</strong>
+          </div>
+          <p class="estimate-result-disclaimer">{{ $t('landing.estimate_result_disclaimer') }}</p>
+          <a href="/betteroff" class="estimate-breakdown-link">{{ $t('landing.estimate_see_breakdown') }} →</a>
+        </div>
+      </div>
+    </section>
+
+    <section v-scroll-reveal class="how-it-works">
+      <div class="features-header">
+        <span class="features-eyebrow">{{ $t('landing.how_it_works_eyebrow') }}</span>
+        <h2 class="features-title">{{ $t('landing.how_it_works_title') }}</h2>
+      </div>
+      <div class="how-it-works-grid">
+        <div v-for="n in 3" :key="n" class="how-it-works-step">
+          <span class="how-it-works-number">{{ n }}</span>
+          <div class="how-it-works-title-text">{{ $t(`landing.how_it_works_step_${n}_title`) }}</div>
+          <div class="how-it-works-body">{{ $t(`landing.how_it_works_step_${n}_body`) }}</div>
         </div>
       </div>
     </section>
@@ -384,15 +580,34 @@
 
     <footer class="landing-footer">
       {{ $t('landing.footer_tagline') }}
+      ·
+      <a href="/betteroff" class="nav-login">{{ $t('landing.footer_calculator_link') }}</a>
     </footer>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      estimate: {
+        role: '',
+        salary: 50000,
+        hireType: 'sponsored',
+      },
+      estimateLoading: false,
+      estimateResult: null,
+    };
+  },
+
   computed: {
     features() {
       return [
+        {
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>',
+          title: this.$t('landing.feature_sponsor_title'),
+          body: this.$t('landing.feature_sponsor_body'),
+        },
         {
           icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a2 2 0 0 1 2 2v1h2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h2V5a2 2 0 0 1 2-2Z" /><path d="M8 13h.01M16 13h.01M9 17h6" /></svg>',
           title: this.$t('landing.feature_ai_title'),
@@ -419,7 +634,7 @@ export default {
           body: this.$t('landing.feature_performance_body'),
         },
         {
-          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z" /><path d="M9.5 12 11 13.5 14.5 10" /></svg>',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h6M7 3h7l3 3v15H7z" /></svg>',
           title: this.$t('landing.feature_compliance_title'),
           body: this.$t('landing.feature_compliance_body'),
         },
@@ -429,6 +644,21 @@ export default {
 
   mounted() {
     document.title = 'BetterOff HR — HR for founders';
+  },
+
+  methods: {
+    async runEstimate() {
+      this.estimateLoading = true;
+      try {
+        const response = await axios.post('/betteroff/calculate', {
+          hire_type: this.estimate.hireType,
+          annual_salary: this.estimate.salary,
+        });
+        this.estimateResult = response.data.result;
+      } finally {
+        this.estimateLoading = false;
+      }
+    },
   },
 };
 </script>

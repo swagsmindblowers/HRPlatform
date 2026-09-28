@@ -35,6 +35,10 @@ class CalculateEmployerCost
             employerVisaCostSharePercent: (float) ($data['employer_visa_cost_share_percent'] ?? 100.0),
             includeRelocation: (bool) ($data['include_relocation'] ?? false),
             relocationCostOverride: isset($data['relocation_cost_override']) ? (float) $data['relocation_cost_override'] : null,
+            isNewEntrant: (bool) ($data['is_new_entrant'] ?? false),
+            hasRelevantPhd: (bool) ($data['has_relevant_phd'] ?? false),
+            hasStemPhd: (bool) ($data['has_stem_phd'] ?? false),
+            isOnImmigrationSalaryList: (bool) ($data['is_on_immigration_salary_list'] ?? false),
         );
 
         $result = $calculator->calculate($input);

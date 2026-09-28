@@ -21,6 +21,10 @@ final class EmployerHireInput
         public readonly float $employerVisaCostSharePercent = 100.0,
         public readonly bool $includeRelocation = false,
         public readonly ?float $relocationCostOverride = null,
+        public readonly bool $isNewEntrant = false,
+        public readonly bool $hasRelevantPhd = false,
+        public readonly bool $hasStemPhd = false,
+        public readonly bool $isOnImmigrationSalaryList = false,
     ) {
     }
 }

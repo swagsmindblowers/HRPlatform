@@ -40,6 +40,16 @@ class BetterOffRatesSeeder extends Seeder
             // this exists so the "below going rate" warning path is testable end to end.
             ['key' => 'uk.skilled_worker.going_rate.2136', 'value' => 34000, 'unit' => 'gbp', 'source_url' => 'https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-occupations', 'notes' => 'SOC 2136 (Programmers and software development professionals) — placeholder, verify against current appendix.'],
 
+            // Discounts applied to the going-rate threshold check. Values are the
+            // fraction the threshold is reduced by (e.g. 0.3 = 30% lower threshold).
+            // Real Home Office rules on how these combine are more nuanced than this
+            // engine models (see EmployerCostCalculator::applyGoingRateDiscount) —
+            // placeholders pending verification against the current appendix.
+            ['key' => 'uk.skilled_worker.discount.new_entrant', 'value' => 0.30, 'unit' => 'rate', 'source_url' => 'https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-worker', 'notes' => 'PLACEHOLDER — verify against current appendix.'],
+            ['key' => 'uk.skilled_worker.discount.phd_relevant', 'value' => 0.10, 'unit' => 'rate', 'source_url' => 'https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-worker', 'notes' => 'PLACEHOLDER — verify against current appendix.'],
+            ['key' => 'uk.skilled_worker.discount.phd_stem', 'value' => 0.20, 'unit' => 'rate', 'source_url' => 'https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-worker', 'notes' => 'PLACEHOLDER — verify against current appendix.'],
+            ['key' => 'uk.skilled_worker.discount.immigration_salary_list', 'value' => 0.20, 'unit' => 'rate', 'source_url' => 'https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-immigration-salary-list', 'notes' => 'PLACEHOLDER — verify against current Immigration Salary List guidance.'],
+
             // Cost-of-living / relocation — explicitly estimates, dataset choice is an open decision in the scope of work.
             ['key' => 'cost_of_living.uk.london', 'value' => 2200, 'unit' => 'gbp_per_month', 'source_url' => 'https://example.invalid/todo-choose-cost-of-living-dataset', 'notes' => 'ESTIMATE — placeholder pending dataset/licence decision.'],
             ['key' => 'cost_of_living.uk.manchester', 'value' => 1500, 'unit' => 'gbp_per_month', 'source_url' => 'https://example.invalid/todo-choose-cost-of-living-dataset', 'notes' => 'ESTIMATE — placeholder pending dataset/licence decision.'],

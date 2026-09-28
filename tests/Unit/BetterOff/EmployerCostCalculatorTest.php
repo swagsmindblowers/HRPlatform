@@ -28,7 +28,11 @@ class EmployerCostCalculatorTest extends TestCase
             ->withRate('uk.visa.skilled_worker.ihs_per_year', 1035, '2020-01-01')
             ->withRate('uk.sponsorship.licence_fee.small_employer', 536, '2020-01-01')
             ->withRate('uk.sponsorship.licence_fee.large_employer', 1476, '2020-01-01')
-            ->withRate('uk.skilled_worker.going_rate.2136', 34000, '2020-01-01');
+            ->withRate('uk.skilled_worker.going_rate.2136', 34000, '2020-01-01')
+            ->withRate('uk.skilled_worker.discount.new_entrant', 0.30, '2020-01-01')
+            ->withRate('uk.skilled_worker.discount.phd_relevant', 0.10, '2020-01-01')
+            ->withRate('uk.skilled_worker.discount.phd_stem', 0.20, '2020-01-01')
+            ->withRate('uk.skilled_worker.discount.immigration_salary_list', 0.20, '2020-01-01');
     }
 
     /** Case 1: a UK hire in the same city shows zero on every sponsorship line. */
@@ -112,6 +116,56 @@ class EmployerCostCalculatorTest extends TestCase
         // The result never exposes a pass/fail verdict — only line items, a total, and warnings.
         $this->assertIsFloat($result->totalCost);
         $this->assertGreaterThan(0, $result->totalCost);
+    }
+
+    /** A new-entrant discount lowers the effective going-rate threshold, so the same salary no longer triggers the warning. */
+    public function test_new_entrant_discount_lowers_effective_going_rate_threshold(): void
+    {
+        $calculator = new EmployerCostCalculator($this->baseRates());
+        $salary = 25000; // below the 34000 going rate, but above the 30%-discounted 23800 threshold
+
+        $withoutDiscount = $calculator->calculate(new EmployerHireInput(
+            hireType: EmployerHireInput::HIRE_TYPE_SPONSORED,
+            annualSalary: $salary,
+            employerSizeClass: EmployerHireInput::EMPLOYER_SIZE_SMALL,
+            hasSponsorLicence: true,
+            asOfDate: new \DateTimeImmutable('2024-06-01'),
+            socCode: '2136',
+        ));
+        $withDiscount = $calculator->calculate(new EmployerHireInput(
+            hireType: EmployerHireInput::HIRE_TYPE_SPONSORED,
+            annualSalary: $salary,
+            employerSizeClass: EmployerHireInput::EMPLOYER_SIZE_SMALL,
+            hasSponsorLicence: true,
+            asOfDate: new \DateTimeImmutable('2024-06-01'),
+            socCode: '2136',
+            isNewEntrant: true,
+        ));
+
+        $this->assertNotEmpty(array_filter($withoutDiscount->warnings, fn ($w) => str_contains($w, 'below the indicative going rate')));
+        $this->assertEmpty(array_filter($withDiscount->warnings, fn ($w) => str_contains($w, 'below the indicative going rate')));
+    }
+
+    /** When more than one discount applies, only the single largest is used (not stacked). */
+    public function test_largest_applicable_discount_is_used_not_stacked(): void
+    {
+        $calculator = new EmployerCostCalculator($this->baseRates());
+
+        // STEM PhD (20%) + new entrant (30%) both apply; salary sits between the
+        // two possible thresholds (23800 at 30% vs 27200 at 20%), so only the
+        // larger 30% discount should clear it.
+        $result = $calculator->calculate(new EmployerHireInput(
+            hireType: EmployerHireInput::HIRE_TYPE_SPONSORED,
+            annualSalary: 25000,
+            employerSizeClass: EmployerHireInput::EMPLOYER_SIZE_SMALL,
+            hasSponsorLicence: true,
+            asOfDate: new \DateTimeImmutable('2024-06-01'),
+            socCode: '2136',
+            isNewEntrant: true,
+            hasStemPhd: true,
+        ));
+
+        $this->assertEmpty(array_filter($result->warnings, fn ($w) => str_contains($w, 'below the indicative going rate')));
     }
 
     /** Case 5: an as-at date before a rate change returns the earlier rate. */
