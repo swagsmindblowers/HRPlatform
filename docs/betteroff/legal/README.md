@@ -19,4 +19,3 @@ Each file in this folder is a **stub**, not a finished legal document. It states
 | [personal-position.md](./personal-position.md) | Before any public launch |
 
 The compliance handoff (Workstream 5) and the public calculator (Workstream 6) are both already live in code ahead of their gating documents here — that's expected for a development/staging environment, but **the rows above marked \"Compliance handoff goes live\" and \"Public calculator launch\" must be closed out before real customer or candidate data reaches either feature in production.**
-"

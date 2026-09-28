@@ -10,4 +10,3 @@
 
 ## What's needed from a professional
 A completed Data Protection Impact Assessment, signed off by whoever holds the data protection role from the register above, before any real (non-test) sponsored-worker or scenario data is created in production.
-"

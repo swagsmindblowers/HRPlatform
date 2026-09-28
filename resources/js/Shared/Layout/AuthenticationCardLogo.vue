@@ -35,9 +35,9 @@
 
 <template>
   <inertia-link :href="'/'" class="w-100 flex justify-center relative">
-    <span class="logo absolute" aria-label="LaunchHR">
+    <span class="logo absolute" aria-label="BetterOff HR">
       <span class="mark"></span>
-      <span class="wordmark">LaunchHR</span>
+      <span class="wordmark">BetterOff HR</span>
     </span>
   </inertia-link>
 </template>

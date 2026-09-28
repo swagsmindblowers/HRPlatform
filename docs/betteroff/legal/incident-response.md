@@ -10,4 +10,3 @@
 
 ## What's needed from a professional
 A breach response plan owner, and a decision on whether the existing audit log is sufficient detection or whether alerting needs to be built (not built in this pass).
-"

@@ -152,7 +152,7 @@
         <div class="flex items-center py-2">
           <inertia-link href="/home" class="flex items-center gap-2 mr-4 no-underline">
             <span class="brand-mark h-6 w-6 rounded-md"></span>
-            <span class="font-display font-extrabold uppercase tracking-tight text-lg leading-none" style="color: var(--color-ink)">LaunchHR</span>
+            <span class="font-display font-extrabold uppercase tracking-tight text-lg leading-none" style="color: var(--color-ink)">BetterOff HR</span>
           </inertia-link>
 
           <!-- MENU -->
@@ -274,7 +274,7 @@
       <div class="ph3 pv2 w-100 flex items-center justify-between">
         <inertia-link href="/home" class="flex items-center gap-2 no-underline">
           <span class="brand-mark h-6 w-6 rounded-md" style="display:inline-block"></span>
-          <span class="font-display font-extrabold uppercase tracking-tight text-lg leading-none" style="color: var(--color-ink)">LaunchHR</span>
+          <span class="font-display font-extrabold uppercase tracking-tight text-lg leading-none" style="color: var(--color-ink)">BetterOff HR</span>
         </inertia-link>
 
         <div class="flex items-center gap-1">
@@ -362,7 +362,7 @@
 
     <div class="mt5 mb4 cf mw7 center tc f7">
       <ul class="list ma0">
-        <li class="di">Thanks for using LaunchHR!</li>
+        <li class="di">Thanks for using BetterOff HR!</li>
       </ul>
     </div>
   </div>
@@ -465,7 +465,7 @@ export default {
     },
 
     updatePageTitle(title) {
-      document.title = title ? `${title} | LaunchHR` : 'LaunchHR';
+      document.title = title ? `${title} | BetterOff HR` : 'BetterOff HR';
     },
 
     showFindModal() {

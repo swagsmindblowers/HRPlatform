@@ -31,4 +31,3 @@ php artisan tinker --execute="... EmployerCostCalculator::compareUkVsSponsored(.
 ```
 
 against the sqlite database seeded by `BetterOffRatesSeeder`, in this session. Re-run the same calls after any change to the seeder or the engine to re-verify these numbers still match.
-"

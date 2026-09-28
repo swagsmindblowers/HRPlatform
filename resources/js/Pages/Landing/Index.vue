@@ -325,7 +325,7 @@
       <div class="flex items-center gap-2">
         <span class="brand-mark"></span>
         <span class="brand-wordmark">
-          LaunchHR
+          BetterOff HR
         </span>
       </div>
       <div class="flex items-center gap-3">
@@ -428,7 +428,7 @@ export default {
   },
 
   mounted() {
-    document.title = 'LaunchHR — HR for founders';
+    document.title = 'BetterOff HR — HR for founders';
   },
 };
 </script>

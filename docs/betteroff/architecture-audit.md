@@ -1,4 +1,4 @@
-# Launch HR / BetterOff.FYI — Architecture Audit
+# BetterOff HR / BetterOff.FYI — Architecture Audit
 
 _Workstream 1 output. Written against `main` after merging PR #3 (`claude/ux-revamp-payroll`), which is the actual application — the `main` branch history before that merge contained only a placeholder README._
 
@@ -10,7 +10,7 @@ _Workstream 1 output. Written against `main` after merging PR #3 (`claude/ux-rev
 - **DB:** Laravel migrations under `database/migrations` (MySQL-compatible; `doctrine/dbal` present for column changes). No Prisma/Drizzle — this is a standard Laravel migration set.
 - **Tests:** PHPUnit 9 (`phpunit/phpunit ^9.0`), config at `phpunit.xml`; `tests/` directory with PSR-4 `Tests\` autoload-dev. Cypress config (`cypress.json`) present for frontend/e2e tests.
 - **Deployment:** Railway (`railway.json`, `railway.worker.json`), Docker (`Dockerfile`, `docker/`), also Heroku-style `Procfile`/`app.json` and `fortrabbit.yml` remnants from the upstream project. CI/preview deploys post commit statuses (`hrplatform-ux-preview - HRPlatform`, `- queue-worker`), both green on the merged commit.
-- **Origin:** This is a fork of the open-source HR platform **OfficeLife** (BSD-3-Clause), renamed in `composer.json` to `launchhr/launchhr`, description "Know how your employees feel." Upstream docs/branding (README, `docs/img/officelife.svg`) still reference OfficeLife and should be swapped for Launch HR branding as a follow-up (not in this scope).
+- **Origin:** This is a fork of the open-source HR platform **OfficeLife** (BSD-3-Clause), renamed in `composer.json` to `launchhr/launchhr`, description "Know how your employees feel." Upstream docs/branding (README, `docs/img/officelife.svg`) still reference OfficeLife and have now been swapped for BetterOff HR branding (README.md rewritten, wordmark/page-title/email updated); `docs/img/officelife.svg` still needs a real logo asset, tracked in docs/betteroff/brand/brand-note.md.
 
 ## Auth & tenancy
 

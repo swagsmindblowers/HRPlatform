@@ -10,4 +10,3 @@
 - Choice of cost-of-living dataset: a public statistics source (e.g. ONS regional data) vs. a licensed commercial dataset (e.g. Numbeo, Mercer).
 - Licence terms review before use — several commercial cost-of-living datasets restrict redistribution or require attribution.
 - Once chosen, replace the placeholder rows in the seeder with real values, each with its own `source_url` and `verified_by`/`verified_at`, following the same pattern as the UK government-sourced rows already in the seeder.
-"

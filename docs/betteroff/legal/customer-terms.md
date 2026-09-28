@@ -9,5 +9,4 @@
 - Acceptable use terms covering the public calculator (no login) and the in-app product separately, since they have different data-collection footprints.
 
 ## What's needed from a professional
-A commercial lawyer to draft terms of service before the public calculator or Launch HR integration is opened to real customers.
-"
+A commercial lawyer to draft terms of service before the public calculator or BetterOff HR integration is opened to real customers.

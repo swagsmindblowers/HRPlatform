@@ -10,4 +10,3 @@
 
 ## What's needed from a professional
 Legal review of the notice text; a product decision on the analytics tool (see [supplier-and-dataset-licences.md](./supplier-and-dataset-licences.md)).
-"

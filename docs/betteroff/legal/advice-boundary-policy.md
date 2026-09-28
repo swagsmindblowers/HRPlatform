@@ -14,4 +14,3 @@
 
 ## What's needed from a professional
 Given the scope of work notes the product owner's own immigration practice, a formal review against the rules on regulated immigration, tax, and financial advice — not something to self-certify.
-"

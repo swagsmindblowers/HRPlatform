@@ -1,11 +1,13 @@
 {
     "name": "launchhr/launchhr",
     "type": "project",
-    "description": "Know how your employees feel.",
+    "description": "BetterOff HR — the hiring-cost and relocation layer for early-stage teams.",
     "keywords": [
         "company",
         "crm",
-        "employee lifecycle"
+        "employee lifecycle",
+        "hiring cost",
+        "relocation"
     ],
     "license": "BSD-3-Clause",
     "require": {

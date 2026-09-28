@@ -9,4 +9,3 @@
 - A filing decision once the search is clear.
 
 **This has not been performed as part of this coding session** — a UKIPO register search is a real-world action outside a coding session, not something to fabricate a result for. Do not treat any figure or claim in this repository as a completed trademark clearance.
-"

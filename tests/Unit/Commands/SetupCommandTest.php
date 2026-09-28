@@ -16,11 +16,12 @@ class SetupCommandTest extends TestCase
 
         Artisan::call('setup');
 
-        $this->assertCount(5, $fake->buffer);
+        $this->assertCount(6, $fake->buffer);
         $fake->assertContainsMessage('✓ Resetting application cache');
         $fake->assertContainsMessage('✓ Clear config cache');
         $fake->assertContainsMessage('✓ Clear route cache');
         $fake->assertContainsMessage('✓ Clear view cache');
         $fake->assertContainsMessage('✓ Performing migrations');
+        $fake->assertContainsMessage('✓ Seeding BetterOff rates');
     }
 }

@@ -9,4 +9,3 @@
 - Cyber cover, given the product will eventually hold real salary and immigration-status data (`betteroff_scenarios`, `betteroff_sponsored_workers`).
 
 This is a real-world purchasing decision, not something a coding session can complete — no cover has been arranged as part of this change.
-"

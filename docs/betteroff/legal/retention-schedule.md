@@ -10,4 +10,3 @@
 
 ## What's needed from a professional
 Confirmed retention periods from someone with current Home Office sponsor guidance and UK employment-record-keeping knowledge; a follow-up engineering task to implement the resulting deletion/archival job once periods are confirmed (not built in this pass — no code currently enforces a retention limit).
-"
